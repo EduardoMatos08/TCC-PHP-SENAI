@@ -1,0 +1,231 @@
+<?php
+
+include "connection.php";
+
+echo '
+
+  <!DOCTYPE html>
+  <html lang="pt-br">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <!-- Importação dos Scripts e Estilos - Status: Funcionando -->
+    <link rel="stylesheet" href="./bootstrap-styles/bootstrap.css" />
+    <script src="./bootstrap-styles/bootstrap.js"></script>
+  </head>
+
+  <style>
+    .mb-3 {
+      width: 50%;
+    }
+
+    form {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0 20px;
+    }
+
+    .btn-danger {
+      align-self: center;
+      height: max-content;
+      width: 125px;
+    }
+
+    .btn-success {
+      width: 125px !important;
+    }
+
+    .td-content {
+      text-align: center;
+    }
+  </style>
+
+  <body>
+    <!-- Corpo do Site -->
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="./index.php">Lançadeiro Senai</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Horários</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Administrador
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="./adm_teacher">Professores</a></li>
+                <li><a class="dropdown-item" href="#">Disciplinas</a></li>
+                <li>
+                  <hr class="dropdown-divider"/>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Horários</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="d-flex">
+            <button class="btn btn-outline-success">Login</button>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <form action="cadastro.php" method="POST">
+      <div class="mb-3">
+        <label id="nome" for="exampleInputEmail1" class="label-adictional-style form-label">Nome Professor</label>
+        <input
+          class="form-control"
+          name="nome"
+          aria-describedby="emailHelp" />
+      </div>
+      <div class="mb-3">
+        <label id="email" for="exampleInputPassword1" class="label-adictional-style form-label">E-mail</label>
+        <input
+          name="email"
+          type="email"
+          class="form-control" />
+      </div>
+      <div class="container">
+        <div style="margin-top: 30px;" class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="m-0">HORÁRIOS DISPONÍVEIS:</h3>
+        </div>
+
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="table-responsive">
+              <input name="horarios" type="hidden">
+              <table class="table table-bordered table-fixed align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th class="text-center">Segunda</th>
+                    <th class="text-center">Terça</th>
+                    <th class="text-center">Quarta</th>
+                    <th class="text-center">Quinta</th>
+                    <th class="text-center">Sexta</th>
+                    <th class="text-center">Sábado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Dias úteis: Segunda a Sexta -->
+                  <tr>
+                    <td id="segunda-manha" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="segunda" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="terca-manha" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="segunda" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="quarta-manha" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="segunda" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="quinta-manha" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="segunda" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="sexta-manha" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="segunda" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="sabado-manha" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="segunda" data-period="manha" aria-pressed="false"></input></td>
+                  </tr>
+                  <tr>
+                    <td id="segunda-tarde" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="terca" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="terca-tarde" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="terca" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="quarta-tarde" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="terca" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="quinta-tarde" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="terca" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="sexta-tarde" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="terca" data-period="manha" aria-pressed="false"></input></td>
+                    <td id="sabado-tarde" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="terca" data-period="manha" aria-pressed="false"></input></td>
+                  </tr>
+                  <tr>
+                    <td id="segunda-noite" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="quarta" data-period="noite" aria-pressed="false"></input></td>
+                    <td id="terca-noite" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="quarta" data-period="noite" aria-pressed="false"></input></td>
+                    <td id="quarta-noite" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="quarta" data-period="noite" aria-pressed="false"></input></td>
+                    <td id="quinta-noite" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="quarta" data-period="noite" aria-pressed="false"></input></td>
+                    <td id="sexta-noite" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="quarta" data-period="noite" aria-pressed="false"></input></td>
+                    <td id="sabado-noite" class="td-content" class="td-center"><input type="button" class="btn toggle-btn btn-danger" data-day="quarta" data-period="noite" aria-pressed="false"></input></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+            <small class="text-muted">Clique em cada botão para alternar entre vermelho (inativo) e verde (ativo).</small>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+      
+    </form>
+
+  </body>
+
+  <script>
+    // Seleciona todos os botões toggle
+    const toggles = document.querySelectorAll(".toggle-btn");
+
+    toggles.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const isActive = btn.classList.contains("btn-success");
+        // alterna classes entre vermelho (btn-danger) e verde (btn-success)
+        if (isActive) {
+          btn.classList.remove("btn-success");
+          btn.classList.add("btn-danger");
+          btn.setAttribute("aria-pressed", "false");
+        } else {
+          btn.classList.remove("btn-danger");
+          btn.classList.add("btn-success");
+          btn.setAttribute("aria-pressed", "true");
+        }
+      });
+    });
+
+  </script>
+
+  </html>
+
+';
+
+// Query para buscar os dados
+$sql = "SELECT id, nome, email FROM professores";
+$result = $connection->query($sql);
+
+// Exibe os resultados em lista
+if ($result->num_rows > 0) {
+    echo '<div class="container mt-4">';
+    echo '<h2 class="mb-4">Lista de Professores</h2>';
+    echo '<table class="table table-striped table-hover table-bordered">';
+    echo '  <thead class="table-light">';
+    echo '    <tr>';
+    echo '      <th scope="col">ID</th>';
+    echo '      <th scope="col">Nome</th>';
+    echo '      <th scope="col">Email</th>';
+    echo '    </tr>';
+    echo '  </thead>';
+    echo '  <tbody>';
+    
+    while($row = $result->fetch_assoc()) {
+        echo '<tr>';
+        echo '<td>' . $row["id"] . '</td>';
+        echo '<td>' . $row["nome"] . '</td>';
+        echo '<td>' . $row["email"] . '</td>';
+        echo '</tr>';
+    }
+    
+    echo '  </tbody>';
+    echo '</table>';
+    echo '</div>';
+} else {
+    echo '<div class="alert alert-warning">Nenhum resultado encontrado.</div>';
+}
+
+?>
