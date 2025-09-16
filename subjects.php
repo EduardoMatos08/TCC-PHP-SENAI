@@ -46,6 +46,24 @@
       </div>
     </div>
   </nav>
+
+  <form action="register.php" method="POST">
+    <div class="container mt-4">
+
+      <h1 style="margin-bottom: 20px; text-align: center;">CADASTRO DE MATÉRIAS</h1>
+
+      <div class="mb-3">
+        <label id="nome-materia" for="exampleInputEmail1" class="label-adictional-style form-label">Nome da Matéria</label>
+        <input class="form-control" name="nome" aria-describedby="emailHelp" />
+      </div>
+
+      <div class="mb-3">
+        <label id="carga-horaria" for="exampleInputPassword1" class="label-adictional-style form-label">Carga Horária</label>
+        <input name="carga_horaria" type="text" class="form-control" />
+      </div>
+
+    </div>
+  </form>
 </body>
 
 </html>
