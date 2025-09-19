@@ -40,6 +40,14 @@
   .td-content {
     text-align: center;
   }
+
+  .td-table-teacher {
+    vertical-align: middle !important;
+  }
+
+  .card {
+    position: static !important;
+  }
 </style>
 
 <body>
@@ -65,7 +73,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="./adm_teacher">Professores</a></li>
-              <li><a class="dropdown-item" href="./subjects.php">Disciplinas</a></li>
+              <li><a class="dropdown-item" href="./adm_subjects.php">Disciplinas</a></li>
               <li>
                 <hr class="dropdown-divider" />
               </li>
@@ -82,20 +90,36 @@
     </div>
   </nav>
   <!-- Formulário de Cadastro -->
-  <form action="register.php" method="POST">
+  <form action="post.php" method="POST">
     <div class="container mt-4">
 
       <h1 style="margin-bottom: 20px; text-align: center;">CADASTRO DE PROFESSORES</h1>
 
       <div class="mb-3">
-        <label id="nome" for="exampleInputEmail1" class="label-adictional-style form-label">Nome Professor</label>
+        <label id="nome" for="exampleInputEmail1" class="label-adictional-style form-label">Nome</label>
         <input class="form-control" name="nome" aria-describedby="emailHelp" />
+      </div>
+
+      <div class="mb-3">
+        <label id="cpf" for="exampleInputPassword1" class="label-adictional-style form-label">CPF</label>
+        <input name="cpf" id="cpf" type="text" class="form-control" maxlength="11" oninput="mascara(this)" />
       </div>
 
       <div class="mb-3">
         <label id="email" for="exampleInputPassword1" class="label-adictional-style form-label">E-mail</label>
         <input name="email" type="email" class="form-control" />
       </div>
+
+      <div class="mb-3">
+        <label id="senha" for="exampleInputPassword1" class="label-adictional-style form-label">Senha</label>
+        <div class="input-group">
+          <input style="position: static !important;" name="senha" type="password" class="form-control" id="senhaInput" />
+          <button type="button" class="btn btn-outline-secondary" id="toggleSenha" tabindex="-1">
+            Mostrar
+          </button>
+        </div>
+      </div>
+    </div>
 
     </div>
     <!-- Tabela de Horários -->
@@ -251,6 +275,75 @@
     hiddenInput.value = selecionados.join(",");
   });
 
+  // Verifica do cpf é válido
+  function mascara(i){
+   
+   var v = i.value;
+   
+   if(isNaN(v[v.length-1])){ // impede entrar outro caractere que não seja número
+      i.value = v.substring(0, v.length-1);
+      return;
+   }
+   
+   i.setAttribute("maxlength", "14");
+   if (v.length == 3 || v.length == 7) i.value += ".";
+   if (v.length == 11) i.value += "-";
+
+}
+  function openModal(name, email, cpf) {
+    // Cria o conteúdo do modal
+    const modalContent = `
+      <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div style="display: flex; justify-content: center;" class="modal-dialog">
+          <div style="align-self: center; width: 70vw; padding: 2%;" class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="infoModalLabel">Informações do Professor</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+              <p><strong>Nome:</strong> ${name}</p>
+              <p><strong>Email:</strong> ${email}</p>
+              <p><strong>CPF:</strong> ${cpf}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Adiciona o modal ao corpo do documento
+    document.body.insertAdjacentHTML('beforeend', modalContent);
+
+    // Inicializa e mostra o modal usando Bootstrap
+    const infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
+    infoModal.show();
+
+    // Remove o modal do DOM quando for fechado
+    document.getElementById('infoModal').addEventListener('hidden.bs.modal', function () {
+      document.getElementById('infoModal').remove();
+    });
+
+  }
+
+  // Botão de mostrar/ocultar senha
+  document.addEventListener('DOMContentLoaded', function () {
+    const senhaInput = document.getElementById('senhaInput');
+    const toggleSenha = document.getElementById('toggleSenha');
+    toggleSenha.addEventListener('click', function () {
+      if (senhaInput.type === 'password') {
+        senhaInput.type = 'text';
+        toggleSenha.textContent = 'Ocultar';
+      } else {
+        senhaInput.type = 'password';
+        toggleSenha.textContent = 'Mostrar';
+      }
+    });
+  });
 
 </script>
 
@@ -259,9 +352,8 @@
 <?php
 
 include "connection.php";
-
 // Query para buscar os dados
-$sql = "SELECT id, nome, email FROM professores";
+$sql = "SELECT id, nome, email, cpf, senha FROM professores";
 $result = $connection->query($sql);
 
 // Exibe os resultados em lista
@@ -275,6 +367,7 @@ if ($result->num_rows > 0) {
   echo '      <th scope="col">ID</th>';
   echo '      <th scope="col">Nome</th>';
   echo '      <th scope="col">Email</th>';
+  echo '      <th style="width: 0;" scope="col"></th>';
   echo '    </tr>';
   echo '  </thead>';
   echo '  <tbody>';
@@ -282,9 +375,10 @@ if ($result->num_rows > 0) {
   // Output de cada linha
   while ($row = $result->fetch_assoc()) {
     echo '<tr>';
-    echo '<td>' . $row["id"] . '</td>';
-    echo '<td>' . $row["nome"] . '</td>';
-    echo '<td>' . $row["email"] . '</td>';
+    echo '<td class="td-table-teacher">' . $row["id"] . '</td>';
+    echo '<td class="td-table-teacher"><a style="cursor: pointer; color: #007bff; text-decoration: underline;" onclick="openModal(\'' . $row["nome"] . '\', \'' . $row["email"] . '\')">' . $row["nome"] . '</a></td>';
+    echo '<td class="td-table-teacher">' . $row["email"] . '</td>';
+    echo '<td><a href="delete.php?id=' . $row["id"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
     echo '</tr>';
   }
 

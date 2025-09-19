@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADM - Professores</title>
+  <!-- Importação dos Scripts e Estilos - Status: Funcionando -->
+  <link rel="stylesheet" href="./bootstrap-styles/bootstrap.css" />
+  <script src="./bootstrap-styles/bootstrap.js"></script>
+</head>
+
+<body>
+  <!-- Corpo do Site -->
+  <!-- Navbar -->
+  <nav style="margin: 0; border-bottom: solid #0000004d 2px; position: fixed; width: 100vw;" class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="./index.php">Lançadeiro Senai</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin: 0;">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Horários</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Administrador
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="./adm_teacher">Professores</a></li>
+              <li><a class="dropdown-item" href="./adm_subjects.php">Disciplinas</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Horários</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="d-flex" style="margin: 0;">
+          <button style="margin-right: 32px;" class="btn btn-outline-success">Login</button>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <h1 style="padding-top: 5.5rem; text-align: center;">CADASTRO DE MATÉRIAS</h1>
+
+  <form action="register_materias.php" method="POST">
+    <div style="display: flex; flex-direction: column; align-items: flex-start; margin-top: 0 !important;" class="container mt-4">
+
+
+      <div style="margin-top: 30px;width: 100%;display: flex;flex-direction: column;align-items: flex-start;">
+        <div class="mb-3">
+          <label id="nome-materia" for="exampleInputEmail1" class="label-adictional-style form-label">Nome da Matéria</label>
+          <input class="form-control" name="nome" aria-describedby="emailHelp" />
+        </div>
+
+        <div class="mb-3">
+          <label id="nome-materia" for="exampleInputEmail1" class="label-adictional-style form-label">Sigla</label>
+          <input class="form-control" name="sigla" aria-describedby="emailHelp" />
+        </div>
+
+        <div class="mb-3">
+          <label id="carga-horaria" for="exampleInputPassword1" class="label-adictional-style form-label">Carga Horária</label>
+          <input name="carga_horaria" type="number" class="form-control" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-top: 30px; width: 30%;">Enviar</button>
+    </div>
+  </form>
+
+</body>
+
+<style>
+  .mb-3{
+    width: 50%;
+  }
+</style>
+
+</html>
+
+<?php
+
+include "connection.php";
+
+// Query para buscar os dados
+$sql = "SELECT id, nome, sigla, carga_horaria FROM materias";
+$result = $connection->query($sql);
+
+// Exibe os resultados em lista
+// Verifica se há resultados
+if ($result->num_rows > 0) {
+  echo '<div style="margin: 30px auto !important;" class="container mt-4">';
+  echo '<h2 style="margin-top: 30px; font-size: 1.75rem; font-weight: 500;" class="mb-4">Lista de Matérias</h2>';
+  echo '<table class="table table-striped table-hover table-bordered">';
+  echo '  <thead class="table-light">';
+  echo '    <tr>';
+  echo '      <th scope="col">ID</th>';
+  echo '      <th scope="col">Nome</th>';
+  echo '      <th scope="col">Sigla</th>';
+  echo '      <th scope="col">Carga Horária</th>';
+  echo '      <th style="width: 1%;"></th>';
+  echo '    </tr>';
+  echo '  </thead>';
+  echo '  <tbody>';
+
+  // Output de cada linha
+  while ($row = $result->fetch_assoc()) {
+    echo '<tr>';
+    echo '<td>' . $row["id"] . '</td>';
+    echo '<td>' . $row["nome"] . '</td>';
+    echo '<td>' . $row["sigla"] . '</td>';
+    echo '<td>' . $row["carga_horaria"] . '</td>';
+    echo '<td><a href="delete_subjects.php?id=' . $row["id"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta matéria?\')">Remover</a></td>';
+    echo '</tr>';
+  }
+
+  // Fecha a tabela e o container
+  echo '  </tbody>';
+  echo '</table>';
+  echo '</div>';
+} else {
+  // Mensagem se não houver resultados
+  echo '<div style="margin: 30px auto !important;" class="container mt-4">';
+  echo '<h3
+      id="nome" 
+      class="label-adictional-style form-label" 
+      style="margin-top: 30px; font-size: 1.75rem; font-weight: 500;">
+      Lista de Matérias
+    </h3>';
+  echo '<div style="margin: 30px 0;" class="alert alert-warning">Nenhum resultado encontrado.</div>';
+  echo '</div>';
+}
+
+?>

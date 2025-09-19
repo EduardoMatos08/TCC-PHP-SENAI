@@ -30,7 +30,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="./adm_teacher">Professores</a></li>
-              <li><a class="dropdown-item" href="./subjects.php">Disciplinas</a></li>
+              <li><a class="dropdown-item" href="./adm_subjects.php">Disciplinas</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
