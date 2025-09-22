@@ -17,6 +17,13 @@ if ($nome_materia == null || $sigla == null || $carga_horaria == null) {
             window.location.href = "../pages/adm_materias.php";
         </script>
     ';
+} else if ($carga_horaria <= 0) {
+    echo '
+        <script>
+            alert("A carga horária da matéria precisa ser maior que zero.");
+            window.location.href = "../pages/adm_materias.php";
+        </script>
+    ';
 } else {
     // Caso todos os campos estejam preenchidos corretamente
     // Mostra mensagem de sucesso e redireciona para a mesma página
