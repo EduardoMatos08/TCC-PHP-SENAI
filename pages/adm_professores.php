@@ -353,7 +353,7 @@
 
 include "../connection.php";
 // Query para buscar os dados
-$sql = "SELECT id, nome, email, cpf, senha FROM professores";
+$sql = "SELECT id_professor, nome_professor, email, cpf, senha FROM professores";
 $result = $connection->query($sql);
 
 // Exibe os resultados em lista
@@ -375,8 +375,8 @@ if ($result->num_rows > 0) {
   // Output de cada linha
   while ($row = $result->fetch_assoc()) {
     echo '<tr>';
-    echo '<td class="td-table-teacher">' . $row["id"] . '</td>';
-    echo '<td class="td-table-teacher"><a style="cursor: pointer; color: #007bff; text-decoration: underline;" onclick="openModal(\'' . $row["nome"] . '\', \'' . $row["email"] . '\')">' . $row["nome"] . '</a></td>';
+    echo '<td class="td-table-teacher">' . $row["id_professor"] . '</td>';
+    echo '<td class="td-table-teacher"><a style="cursor: pointer; color: #007bff; text-decoration: underline;" onclick="openModal(\'' . $row["nome_professor"] . '\', \'' . $row["email"] . '\', \'' . $row["cpf"] . '\')">' . $row["nome_professor"] . '</a></td>';
     echo '<td class="td-table-teacher">' . $row["email"] . '</td>';
     echo '<td><a href="../methods/delete_professores?id=' . $row["id"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
     echo '</tr>';

@@ -2,13 +2,13 @@
 
 include "../connection.php";
 
-// Verifica se o ID do usuário foi enviado via GET
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
+// Verifica se o id_materia do usuário foi enviado via GET
+if (isset($_GET['id_materia'])) {
+    $id_materia = intval($_GET['id_materia']);
 
     // Prepara e executa a exclusão
-    $stmt = $connection->prepare("DELETE FROM materias WHERE id = ?");
-    $stmt->bind_param("i", $id);
+    $stmt = $connection->prepare("DELETE FROM materias WHERE id_materia = ?");
+    $stmt->bind_param("i", $id_materia);
 
     if ($stmt->execute()) {
         // Redireciona de volta para a página de administração
@@ -20,7 +20,7 @@ if (isset($_GET['id'])) {
 
     $stmt->close();
 } else {
-    echo "ID de matéria não especificado.";
+    echo "id de matéria não especificado.";
 }
 
 ?>

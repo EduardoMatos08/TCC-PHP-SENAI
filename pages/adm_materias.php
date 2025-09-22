@@ -10,6 +10,14 @@
   <script src="../bootstrap-styles/bootstrap.js"></script>
 </head>
 
+<style>
+
+  td {
+    vertical-align: middle;
+  }
+
+</style>
+
 <body>
   <!-- Corpo do Site -->
   <!-- Navbar -->
@@ -54,7 +62,7 @@
       <div style="margin-top: 30px;width: 100%;display: flex;flex-direction: column;align-items: flex-start;">
         <div class="mb-3">
           <label id="nome-materia" for="exampleInputEmail1" class="label-adictional-style form-label">Nome da Matéria</label>
-          <input class="form-control" name="nome" aria-describedby="emailHelp" />
+          <input class="form-control" name="nome_materia" aria-describedby="emailHelp" />
         </div>
 
         <div class="mb-3">
@@ -87,7 +95,7 @@
 include "../connection.php";
 
 // Query para buscar os dados
-$sql = "SELECT id, nome, sigla, carga_horaria FROM materias";
+$sql = "SELECT id_materia, nome_materia, sigla, carga_horaria FROM materias";
 $result = $connection->query($sql);
 
 // Exibe os resultados em lista
@@ -110,11 +118,11 @@ if ($result->num_rows > 0) {
   // Output de cada linha
   while ($row = $result->fetch_assoc()) {
     echo '<tr>';
-    echo '<td>' . $row["id"] . '</td>';
-    echo '<td>' . $row["nome"] . '</td>';
+    echo '<td>' . $row["id_materia"] . '</td>';
+    echo '<td>' . $row["nome_materia"] . '</td>';
     echo '<td>' . $row["sigla"] . '</td>';
-    echo '<td>' . $row["carga_horaria"] . '</td>';
-    echo '<td><a href="../methods/delete_materias.php?id=' . $row["id"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta matéria?\')">Remover</a></td>';
+    echo '<td>' . $row["carga_horaria"] . ' Horas</td>';
+    echo '<td><a href="../methods/delete_materias.php?id_materia=' . $row["id_materia"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta matéria?\')">Remover</a></td>';
     echo '</tr>';
   }
 

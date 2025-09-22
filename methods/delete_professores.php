@@ -4,12 +4,12 @@
 include '../connection.php';
 
 // Verifica se o ID do usuário foi enviado via GET
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
+if (isset($_GET['id_professor'])) {
+    $id_professor = intval($_GET['id_professor']);
 
     // Prepara e executa a exclusão
-    $stmt = $connection->prepare("DELETE FROM professores WHERE id = ?");
-    $stmt->bind_param("i", $id);
+    $stmt = $connection->prepare("DELETE FROM professores WHERE id_professor = ?");
+    $stmt->bind_param("i", $id_professor);
 
     if ($stmt->execute()) {
         // Redireciona de volta para a página de administração
