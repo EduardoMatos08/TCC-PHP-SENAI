@@ -97,7 +97,7 @@
 
       <div class="mb-3">
         <label id="nome" for="exampleInputEmail1" class="label-adictional-style form-label">Nome</label>
-        <input class="form-control" name="nome" aria-describedby="emailHelp" />
+        <input class="form-control" name="nome_professor" aria-describedby="emailHelp" />
       </div>
 
       <div class="mb-3">
@@ -290,7 +290,7 @@
    if (v.length == 11) i.value += "-";
 
 }
-  function openModal(name, email, cpf) {
+  function openModal(name_professor, email, cpf) {
     // Cria o conteúdo do modal
     const modalContent = `
       <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
@@ -303,7 +303,7 @@
             </div>
 
             <div class="modal-body">
-              <p><strong>Nome:</strong> ${name}</p>
+              <p><strong>Nome:</strong> ${name_professor}</p>
               <p><strong>Email:</strong> ${email}</p>
               <p><strong>CPF:</strong> ${cpf}</p>
             </div>
@@ -378,7 +378,7 @@ if ($result->num_rows > 0) {
     echo '<td class="td-table-teacher">' . $row["id_professor"] . '</td>';
     echo '<td class="td-table-teacher"><a style="cursor: pointer; color: #007bff; text-decoration: underline;" onclick="openModal(\'' . $row["nome_professor"] . '\', \'' . $row["email"] . '\', \'' . $row["cpf"] . '\')">' . $row["nome_professor"] . '</a></td>';
     echo '<td class="td-table-teacher">' . $row["email"] . '</td>';
-    echo '<td><a href="../methods/delete_professores?id=' . $row["id"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
+    echo '<td><a href="../methods/delete_professores?id=' . $row["id_professor"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
     echo '</tr>';
   }
 
