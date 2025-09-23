@@ -4,10 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADM - Professores</title>
+  <title>ADM - Matérias</title>
   <!-- Importação dos Scripts e Estilos - Status: Funcionando -->
   <link rel="stylesheet" href="../bootstrap-styles/bootstrap.css" />
   <script src="../bootstrap-styles/bootstrap.js"></script>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.png">
 </head>
 
 <style>
@@ -23,7 +24,7 @@
   <!-- Navbar -->
   <nav style="margin: 0; border-bottom: solid #0000004d 2px; position: fixed; width: 100vw;" class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="../index.php">Lançadeiro Senai</a>
+      <a class="navbar-brand" href="./home.php">Lançadeiro Senai</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -49,7 +50,7 @@
           </li>
         </ul>
         <ul class="d-flex" style="margin: 0;">
-          <button style="margin-right: 32px;" class="btn btn-outline-success">Login</button>
+        <a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>
         </ul>
       </div>
     </div>
