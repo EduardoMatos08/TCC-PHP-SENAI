@@ -1,5 +1,20 @@
+<?php
+session_start();
+if (!isset($_SESSION['id_professor'])) {
+  header("Location: ../index.php");
+  exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
+<style>
+  .navbar-text {
+    font-weight: 500;
+    font-size: 18px;
+  }
+</style>
 
 <head>
   <meta charset="UTF-8" />
@@ -42,11 +57,35 @@
           </li>
         </ul>
         <ul class="d-flex" style="margin: 0;">
-        <a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>
+          <?php if (isset($_SESSION['id_professor'])): ?>
+            <span class="navbar-text" style="margin-right: 16px;">
+              Olá, <?php echo htmlspecialchars($_SESSION['nome_professor']); ?>
+            </span>
+            <a href="../methods/logout.php" class="btn btn-outline-danger">Logout</a>
+          <?php else: ?>
+            <a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>
+          <?php endif; ?>
         </ul>
+
       </div>
     </div>
   </nav>
 </body>
 
 </html>
+
+<?php if (!empty($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Administrador
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" href="./adm_professores.php">Professores</a></li>
+      <li><a class="dropdown-item" href="./adm_materias.php">Disciplinas</a></li>
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item" href="#">Horários</a></li>
+    </ul>
+  </li>
+<?php endif; ?>

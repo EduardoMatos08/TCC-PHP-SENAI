@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `materias` (
   `carga_horaria` int NOT NULL,
   `id_materia` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id_materia`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -52,7 +52,27 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `horarios` varchar(100) NOT NULL,
   `materias` varchar(1000) NOT NULL,
   PRIMARY KEY (`id_professor`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `professor_materia`
+--
+
+DROP TABLE IF EXISTS `professor_materia`;
+CREATE TABLE IF NOT EXISTS `professor_materia` (
+    `id_professor` INT NOT NULL,
+    `id_materia` INT NOT NULL,
+    PRIMARY KEY (`id_professor`, `id_materia`),
+    CONSTRAINT `fk_professor` FOREIGN KEY (`id_professor`) REFERENCES `professores`(`id_professor`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `fk_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias`(`id_materia`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

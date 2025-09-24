@@ -4,19 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADM - Professores</title>
+  <title>Home</title>
   <!-- Importação dos Scripts e Estilos - Status: Funcionando -->
   <link rel="stylesheet" href="../bootstrap-styles/bootstrap.css" />
   <script src="../bootstrap-styles/bootstrap.js"></script>
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.png">
 </head>
 
 <style>
-
-  .btn-outline-success a:hover {
-    text-decoration: none;
-  }
-
   .mt-4 {
     margin-top: 5.5rem !important;
   }
@@ -62,7 +56,7 @@
   <nav style="border-bottom: solid #0000004d 2px; position: fixed; width: 100vw;"
     class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="./home.php">Lançadeiro Senai</a>
+      <a class="navbar-brand" href="../index.php">Lançadeiro Senai</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -90,7 +84,7 @@
           </li>
         </ul>
         <ul class="d-flex" style="margin: 0;">
-          <a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>
+          <button style="margin-right: 32px;" class="btn btn-outline-success">Login</button>
         </ul>
       </div>
     </div>
@@ -126,6 +120,30 @@
         </div>
       </div>
     </div>
+
+  
+    <!-- Seleção de matérias -->
+    <div class="mb-3">
+      <label for="materias" class="form-label">Matérias</label>
+      <select name="materias[]" id="materias" class="form-select" multiple>
+        <?php
+        include "../connection.php";
+        $sqlMaterias = "SELECT id_materia, nome_materia FROM materias";
+        $resultMaterias = $connection->query($sqlMaterias);
+
+        if ($resultMaterias->num_rows > 0) {
+          while ($row = $resultMaterias->fetch_assoc()) {
+            echo "<option value='" . $row['id_materia'] . "'>" . $row['nome_materia'] . "</option>";
+          }
+        } else {
+          echo "<option disabled>Nenhuma matéria cadastrada</option>";
+        }
+        ?>
+      </select>
+      <small class="form-text text-muted">Segure CTRL (ou Command no Mac) para selecionar mais de uma matéria.</small>
+    </div>
+
+
 
     </div>
     <!-- Tabela de Horários -->
@@ -356,53 +374,47 @@
 </html>
 
 <?php
-
 include "../connection.php";
-// Query para buscar os dados
-$sql = "SELECT id_professor, nome_professor, email, cpf, senha FROM professores";
+
+$sql = "SELECT 
+            p.id_professor, 
+            p.nome_professor, 
+            p.email, 
+            p.cpf, 
+            GROUP_CONCAT(m.nome_materia SEPARATOR ', ') AS materias
+        FROM professores p
+        LEFT JOIN professor_materia pm ON p.id_professor = pm.id_professor
+        LEFT JOIN materias m ON pm.id_materia = m.id_materia
+        GROUP BY p.id_professor";
+
 $result = $connection->query($sql);
 
-// Exibe os resultados em lista
-// Verifica se há resultados
-if ($result->num_rows > 0) {
-  echo '<div style="margin: 30px auto !important;" class="container mt-4">';
-  echo '<h2 style="margin-top: 30px; font-size: 1.75rem; font-weight: 500;" class="mb-4">Lista de Professores</h2>';
-  echo '<table class="table table-striped table-hover table-bordered">';
-  echo '  <thead class="table-light">';
-  echo '    <tr>';
-  echo '      <th scope="col">ID</th>';
-  echo '      <th scope="col">Nome</th>';
-  echo '      <th scope="col">Email</th>';
-  echo '      <th style="width: 0;" scope="col"></th>';
-  echo '    </tr>';
-  echo '  </thead>';
-  echo '  <tbody>';
-
-  // Output de cada linha
-  while ($row = $result->fetch_assoc()) {
-    echo '<tr>';
-    echo '<td class="td-table-teacher">' . $row["id_professor"] . '</td>';
-    echo '<td class="td-table-teacher"><a style="cursor: pointer; color: #007bff; text-decoration: underline;" onclick="openModal(\'' . $row["nome_professor"] . '\', \'' . $row["email"] . '\', \'' . $row["cpf"] . '\')">' . $row["nome_professor"] . '</a></td>';
-    echo '<td class="td-table-teacher">' . $row["email"] . '</td>';
-    echo '<td><a href="../methods/delete_professores?id_professor=' . $row["id_professor"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
-    echo '</tr>';
-  }
-
-  // Fecha a tabela e o container
-  echo '  </tbody>';
-  echo '</table>';
-  echo '</div>';
-} else {
-  // Mensagem se não houver resultados
-  echo '<div style="margin: 30px auto !important;" class="container mt-4">';
-  echo '<h3
-      id="nome" 
-      class="label-adictional-style form-label" 
-      style="margin-top: 30px; font-size: 1.75rem; font-weight: 500;">
-      Lista de Professores
-    </h3>';
-  echo '<div style="margin: 30px 0;" class="alert alert-warning">Nenhum resultado encontrado.</div>';
-  echo '</div>';
+if (!$result) {
+    die("Erro na query: " . $connection->error);
 }
 
+if ($result->num_rows > 0) {
+    echo '<div class="container mt-4">';
+    echo '<h2>Lista de Professores</h2>';
+    echo '<table class="table table-striped table-hover table-bordered">';
+    echo '<thead><tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>CPF</th>
+            <th>Matérias</th>
+          </tr></thead><tbody>';
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>{$row['id_professor']}</td>";
+        echo "<td>{$row['nome_professor']}</td>";
+        echo "<td>{$row['email']}</td>";
+        echo "<td>{$row['cpf']}</td>";
+        echo "<td>{$row['materias']}</td>";
+        echo "</tr>";
+    }
+    echo '</tbody></table></div>';
+} else {
+    echo '<div class="container mt-4"><div class="alert alert-warning">Nenhum professor cadastrado.</div></div>';
+}
 ?>
