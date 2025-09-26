@@ -1,11 +1,3 @@
-<?php
-session_start();
-if (!isset($_SESSION['id_professor'])) {
-  header("Location: ../index.php");
-  exit;
-}
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
