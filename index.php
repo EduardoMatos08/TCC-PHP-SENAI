@@ -74,3 +74,28 @@
 </body>
 
 </html>
+
+<?php
+
+// Inclui o arquivo que faz a conexão com o banco de dados
+include "./connection.php";
+
+// Recebe os dados enviados pelo formulário (email e senha) via método POST
+// Prepara a query para buscar nome, email e horários do professor pelo ID
+$stmt = $connection->prepare('SELECT nome_professor, email, cpf, horarios FROM professores WHERE id_professor = ? LIMIT 1');
+// Substitui o "?" da query pelo valor do ID (como inteiro)
+$stmt->bind_param('i', $email);
+// Executa a query
+$stmt->execute();
+// Obtém o resultado da consulta
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+echo json_encode([
+  'nome_professor' => $row['nome_professor'],
+  'email' => $row['email'],
+  'cpf' => $row['cpf'],
+  'horarios' => $row['horarios']
+]);
+
+
+?>

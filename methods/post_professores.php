@@ -6,9 +6,13 @@ include "../connection.php";
 $nome_professor = $_POST['nome_professor'];
 $cpf = $_POST['cpf'];
 $email = $_POST['email'];
-// Criptografa a senha usando MD5
-$senha = md5($_POST['senha']);
+
+// Criptografa a senha
+$senha = $_POST['senha'];
+$senha = password_hash($password, PASSWORD_DEFAULT);
+
 $horarios = $_POST['horarios'];
+
 // Verifica se matérias foram enviadas; se não, define como array vazio
 $materias = isset($_POST['materias']) ? $_POST['materias'] : [];
 
