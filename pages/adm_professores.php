@@ -52,6 +52,20 @@ form {
 .card {
     position: static !important;
 }
+
+#adm-div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#adm-div .form-label {
+    margin: 0;
+}
+
+.form-check-input {
+    margin: 0;
+}
 </style>
 
 <body>
@@ -90,8 +104,12 @@ form {
                     </button>
                 </div>
             </div>
-            <!-- Botão que abre o modal -->
 
+            <div id="adm-div" class="mb-3">
+                <label id="admin" for="exampleInputPassword1" class="label-adictional-style form-label">Administrador: </label>
+                <input onclick="toggleValue()" class="form-check-input" type="checkbox" name="admin" id="adminSim" value="0"></input>
+            </div>
+            <!-- Botão que abre o modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#materiasModal">
                 Selecionar matérias
             </button>
@@ -286,6 +304,17 @@ toggles.forEach(btn => {
     });
 });
 
+function toggleValue() {
+    checkboxAdmin = document.getElementById("adminSim");
+    if (checkboxAdmin.value == "0") {
+        checkboxAdmin.value = "1";
+    } else {
+        checkboxAdmin.value = "0";
+    }
+    
+    console.log(checkboxAdmin);
+}
+
 // Antes de enviar o formulário, coleta os horários ativos
 document.querySelector("form").addEventListener("submit", (e) => {
 
@@ -385,7 +414,8 @@ include "../connection.php";
 $sql = "SELECT 
             p.id_professor, 
             p.nome_professor, 
-            p.email, 
+            p.email,
+            p.admin,
             p.cpf, 
             GROUP_CONCAT(m.nome_materia SEPARATOR ', ') AS materias
         FROM professores p
@@ -409,6 +439,7 @@ if ($result->num_rows > 0) {
             <th>Email</th>
             <th>CPF</th>
             <th>Matérias</th>
+            <th>Administrador</th>
             <th style="width: 0 !important"></th>
           </tr></thead><tbody>';
     while ($row = $result->fetch_assoc()) {
@@ -418,6 +449,12 @@ if ($result->num_rows > 0) {
         echo "<td>{$row['email']}</td>";
         echo "<td>{$row['cpf']}</td>";
         echo "<td>{$row['materias']}</td>";
+        if ($row['admin'] == 1) {
+            echo "<td>Sim</td>";
+        } else {
+            echo "<td>Não</td>";
+        };
+        
         echo '<td><a href="../methods/delete_professores?id_professor=' . $row["id_professor"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
         echo "</tr>";
     }

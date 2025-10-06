@@ -41,6 +41,8 @@ echo '
             </li>
 ';
 
+
+// Exibe aba admin apenas se for admin
 if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1) {
     echo '
         <li class="nav-item dropdown">
@@ -58,19 +60,17 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1) {
             </li>
             </ul>
         </li>
-        </ul>
-    ';
-
-} else {
-    // Só mostra o botão de login se o usuário NÃO estiver logado
-    if (!isset($_SESSION['id_professor'])) {
-        echo '
-            <ul class="d-flex" style="margin: 0;">
-            <a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>
-            </ul>
-        ';
-    }
+        </ul>';
 }
+
+// Botão login/logout
+echo '<ul class="d-flex" style="margin: 0;">';
+if (isset($_SESSION['id_professor'])) {
+    echo '<a style="margin-right: 32px;" href="../methods/logout.php" class="btn btn-outline-danger">Logout</a>';
+} else {
+    echo '<a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>';
+}
+echo '</ul>';
 
 echo '
     </div>

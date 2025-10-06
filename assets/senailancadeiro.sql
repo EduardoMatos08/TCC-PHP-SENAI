@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 23-Set-2025 às 10:26
+-- Tempo de geração: 06-Out-2025 às 12:03
 -- Versão do servidor: 8.0.31
 -- versão do PHP: 8.0.26
 
@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `nome_professor` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `email` varchar(100) NOT NULL,
   `senha` varchar(100) NOT NULL,
+  `admin` tinyint(1) NOT NULL,
   `cpf` varchar(100) NOT NULL,
   `horarios` varchar(100) NOT NULL,
   `materias` varchar(1000) NOT NULL,
@@ -62,17 +63,22 @@ CREATE TABLE IF NOT EXISTS `professores` (
 
 DROP TABLE IF EXISTS `professor_materia`;
 CREATE TABLE IF NOT EXISTS `professor_materia` (
-    `id_professor` INT NOT NULL,
-    `id_materia` INT NOT NULL,
-    PRIMARY KEY (`id_professor`, `id_materia`),
-    CONSTRAINT `fk_professor` FOREIGN KEY (`id_professor`) REFERENCES `professores`(`id_professor`)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `fk_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias`(`id_materia`)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+  `id_professor` int NOT NULL,
+  `id_materia` int NOT NULL,
+  PRIMARY KEY (`id_professor`,`id_materia`),
+  KEY `fk_materia` (`id_materia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Restrições para despejos de tabelas
+--
+
+--
+-- Limitadores para a tabela `professor_materia`
+--
+ALTER TABLE `professor_materia`
+  ADD CONSTRAINT `fk_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_professor` FOREIGN KEY (`id_professor`) REFERENCES `professores` (`id_professor`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
