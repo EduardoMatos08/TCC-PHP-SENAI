@@ -1,11 +1,12 @@
 <?php
-
+session_start();
 include '../connection.php';
 
 $sql = "SELECT 
             p.id_professor, 
             p.nome_professor, 
-            p.email, 
+            p.email,
+            p.admin,
             p.cpf, 
             GROUP_CONCAT(m.nome_materia SEPARATOR ',') AS materias
         FROM professores p
@@ -15,7 +16,15 @@ $sql = "SELECT
 ";
 
 $result = $connection->query($sql);
-$row = $result->fetch_assoc();
+$data = array();
+
+while ($row = $result->fetch_assoc()) {
+    $data[] = $row;
+}
+
+$json = json_encode($data);
+
+echo "<script>console.log(" . json_encode($json) . ");</script>";
 
 echo '
     <!-- Navbar -->
@@ -32,7 +41,7 @@ echo '
             </li>
 ';
 
-if () {
+if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1) {
     echo '
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,12 +60,16 @@ if () {
         </li>
         </ul>
     ';
+
 } else {
-    echo '
-        <ul class="d-flex" style="margin: 0;">
-        <a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>
-        </ul>
-    ';
+    // Só mostra o botão de login se o usuário NÃO estiver logado
+    if (!isset($_SESSION['id_professor'])) {
+        echo '
+            <ul class="d-flex" style="margin: 0;">
+            <a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>
+            </ul>
+        ';
+    }
 }
 
 echo '
