@@ -1,8 +1,8 @@
 <?php
     
-    include '../connection';
+    include '../connection.php';
 
-    $sql = "SELECT 
+    $sql2 = "SELECT 
             p.id_professor, 
             p.nome_professor, 
             p.email,
@@ -15,14 +15,14 @@
         GROUP BY p.id_professor
     ";
 
-    $result = $connection->query($sql);
-    $data = array();
+    $result2 = $connection->query($sql2);
+    $data2 = array();
 
-    while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
+    while ($row2 = $result2->fetch_assoc()) {
+        $data2[] = $row2;
     }
 
-    $json = json_encode($data);
+    $json2 = json_encode($data2);
     
     if (isset($_SESSION['admin']) && $_SESSION['admin'] == 0 || $_SESSION['admin'] == null) {
         echo '

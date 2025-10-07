@@ -27,11 +27,38 @@
     .bg-purple {
       background-color: #6f42c1;
     }
+
+    #div-container {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+    }
+
+    .alert-warning {
+      width: 50% !important;
+    }
+
+    .mt-4 {
+      display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
   </style>
 </head>
 <body>
 
-  <div class="background-page container-fluid vh-100 d-flex justify-content-center align-items-center">
+  <div id="div-container" class="background-page container-fluid vh-100 d-flex justify-content-center align-items-center">
+  <script>
+    const currentUrl = new URL(window.location.href);
+    const erro1 = currentUrl.origin + currentUrl.pathname + '?erro=1';
+    const erro2 = currentUrl.origin + currentUrl.pathname + '?erro=2';
+    if (currentUrl.searchParams.get('erro') === '2') {
+      document.getElementById("div-container").innerHTML = '<div class="container mt-4"><div class="alert alert-warning">Entre   como ADM para acessar a página.</div></div>';
+    } if (currentUrl.searchParams.get('erro') === '1') {
+      document.getElementById("div-container").innerHTML = '<div class="container mt-4"><div class="alert alert-warning">Usuário ou Senha incorretos.</div></div>';
+    }
+  </script>
+  
     <div class="row shadow-lg rounded-4 overflow-hidden w-75" style="max-width: 900px;">
 
       <!-- Lado esquerdo -->
@@ -53,13 +80,6 @@
             <input type="password" name="senha" class="form-control" placeholder="Senha" required>
           </div>
 
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <input class="form-check-input" type="checkbox" name="remember" id="remember">
-              <label for="remember">Lembrar-me</label>
-            </div>
-          </div>
-
           <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
       </div>
@@ -67,14 +87,5 @@
   </div>
 
 </body>
-
-<script>
-  const currentUrl = window.location.href;
-  let erro2 = window.location.href + '?erro=2'
-
-  if (currentUrl == erro2) {
-    alert('cuzão')
-  }
-</script>
-
+  
 </html>

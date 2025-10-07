@@ -362,7 +362,7 @@ function openModal(name_professor, email, cpf) {
 
             <div class="modal-header">
               <h5 class="modal-title" id="infoModalLabel">Informações do Professor</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>for
             </div>
 
             <div class="modal-body">
@@ -460,7 +460,7 @@ if ($result->num_rows > 0) {
             echo "<td>Não</td>";
         };
         
-        echo '<td><a href="../methods/delete_professores?id_professor=' . $row["id_professor"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
+        echo '<td><a href="../methods/delete_professores.php?id_professor=' . $row["id_professor"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
         echo "</tr>";
     }
     echo '</tbody></table></div>';
