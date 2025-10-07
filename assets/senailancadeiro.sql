@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 06-Out-2025 às 12:03
+-- Tempo de geração: 07-Out-2025 às 14:09
 -- Versão do servidor: 8.0.31
 -- versão do PHP: 8.0.26
 
@@ -34,7 +34,14 @@ CREATE TABLE IF NOT EXISTS `materias` (
   `carga_horaria` int NOT NULL,
   `id_materia` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id_materia`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `materias`
+--
+
+INSERT INTO `materias` (`nome_materia`, `sigla`, `carga_horaria`, `id_materia`) VALUES
+('Análise de Eduardos em Banheiras', 'ANAL-EB', 1200, 8);
 
 -- --------------------------------------------------------
 
@@ -53,7 +60,15 @@ CREATE TABLE IF NOT EXISTS `professores` (
   `horarios` varchar(100) NOT NULL,
   `materias` varchar(1000) NOT NULL,
   PRIMARY KEY (`id_professor`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `professores`
+--
+
+INSERT INTO `professores` (`id_professor`, `nome_professor`, `email`, `senha`, `admin`, `cpf`, `horarios`, `materias`) VALUES
+(0, 'Administrador', 'admin@gmail.com', '$2y$10$9oDpF9dqdLI04iwAie/3A.aoD9Y/l2o8Nvx8UVaXPhMW4tdaa.5DC', 1, '000.000.000-00', '', ''),
+(7, 'Eduardo Penis', 'eduardo@gmail.com', '$2y$10$sE0eSahfkBF5tv43X9Dc/uhQy0n372zl.HXAr.7x07JFupQPm65IO', 0, '000.000.000-00', 'sabado-noite', '');
 
 -- --------------------------------------------------------
 

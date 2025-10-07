@@ -67,6 +67,16 @@ form {
 
 .form-check-input {
     margin: 0;
+    margin-right: 5px;
+}
+
+.form-check {
+    display: flex;
+    min-height: 1.5rem;
+    padding-left: 1.5em;
+    margin-bottom: 0.125rem;
+    flex-direction: row;
+    align-items: center;
 }
 </style>
 
@@ -362,7 +372,7 @@ function openModal(name_professor, email, cpf) {
 
             <div class="modal-header">
               <h5 class="modal-title" id="infoModalLabel">Informações do Professor</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>for
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
@@ -383,7 +393,7 @@ function openModal(name_professor, email, cpf) {
     document.body.insertAdjacentHTML('beforeend', modalContent);
 
     // Inicializa e mostra o modal usando Bootstrap
-    const infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
+    const infoModal = new bootstrap.Modal(document.getElementById('infoModal'), { backdrop: 'static', keyboard: false });
     infoModal.show();
 
     // Remove o modal do DOM quando for fechado
@@ -450,7 +460,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
         echo "<td>{$row['id_professor']}</td>";
-        echo "<td>{$row['nome_professor']}</td>";
+        echo "<td><a onclick='openModal(\"{$row['nome_professor']}\", \"{$row['email']}\", \"{$row['cpf']}\")' class='btn btn-link'>{$row['nome_professor']}</a></td>";
         echo "<td>{$row['email']}</td>";
         echo "<td>{$row['cpf']}</td>";
         echo "<td>{$row['materias']}</td>";
