@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 
+
+
 <head>
 
     <meta charset="UTF-8" />
@@ -282,6 +284,7 @@ form {
 </body>
 
 <script>
+
 // Seleciona todos os botões toggle
 const toggles = document.querySelectorAll(".toggle-btn");
 const hiddenInput = document.getElementById("horariosSelecionados");
@@ -428,6 +431,8 @@ $result = $connection->query($sql);
 if (!$result) {
     die("Erro na query: " . $connection->error);
 }
+
+include '../components/adm_verification.php';
 
 if ($result->num_rows > 0) {
     echo '<div class="container mt-4">';

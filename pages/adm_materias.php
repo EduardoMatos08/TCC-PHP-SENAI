@@ -68,6 +68,8 @@ include "../connection.php";
 $sql = "SELECT id_materia, nome_materia, sigla, carga_horaria FROM materias";
 $result = $connection->query($sql);
 
+include '../components/adm_verification.php';
+
 // Exibe os resultados em lista
 // Verifica se há resultados
 if ($result->num_rows > 0) {

@@ -67,4 +67,14 @@
   </div>
 
 </body>
+
+<script>
+  const currentUrl = window.location.href;
+  let erro2 = window.location.href + '?erro=2'
+
+  if (currentUrl == erro2) {
+    alert('cuzão')
+  }
+</script>
+
 </html>
