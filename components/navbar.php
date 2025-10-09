@@ -24,8 +24,6 @@ while ($row = $result->fetch_assoc()) {
 
 $json = json_encode($data);
 
-echo "<script>console.log(" . json_encode($json) . ");</script>";
-
 echo '
     <!-- Navbar -->
     <nav style="margin: 0; border-bottom: solid #0000004d 2px; position: fixed; width: 100vw;" class="navbar navbar-expand-lg navbar-light bg-light">

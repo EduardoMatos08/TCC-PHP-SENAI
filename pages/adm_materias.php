@@ -24,6 +24,81 @@
   
   <?php include '../components/navbar.php'; ?>
 
+  <h1 style="padding-top: 5.5rem; text-align: center;">CADASTRO DE CURSOS</h1>
+
+  <form action="../methods/post_cursos.php" method="POST">
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 0 !important;" class="container mt-4">
+
+      <div style="margin-top: 30px;width: 100%;display: flex;flex-direction: column;align-items: flex-start;">
+        <div class="mb-3">
+          <label id="nome-materia" for="exampleInputEmail1" class="label-adictional-style form-label">Nome do Curso</label>
+          <input class="form-control" name="nome_curso" aria-describedby="emailHelp" />
+        </div>
+
+        <div class="mb-3">
+          <label id="nome-materia" for="exampleInputEmail1" class="label-adictional-style form-label">Sigla</label>
+          <input class="form-control" name="sigla_curso" aria-describedby="emailHelp" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-top: 30px; width: 30%;">Enviar</button>
+    </div>
+  </form>
+
+  <?php
+
+  include "../connection.php";
+
+  // Query para buscar os dados
+  $sql2 = "SELECT id_curso, nome_curso, sigla_curso FROM cursos";
+  $result2 = $connection->query($sql2);
+
+  // Exibe os resultados em lista
+  // Verifica se há resultados
+  if ($result2->num_rows > 0) {
+    echo '<div style="margin: 30px auto !important;" class="container mt-4">';
+    echo '<h2 style="margin-top: 30px; font-size: 1.75rem; font-weight: 500;" class="mb-4">Lista de Cursos</h2>';
+    echo '<table class="table table-striped table-hover table-bordered">';
+    echo '  <thead class="table-light">';
+    echo '    <tr>';
+    echo '      <th scope="col">ID</th>';
+    echo '      <th scope="col">Nome</th>';
+    echo '      <th scope="col">Sigla</th>';
+    echo '      <th scope="col">Carga Horária</th>';
+    echo '      <th style="width: 1%;"></th>';
+    echo '    </tr>';
+    echo '  </thead>';
+    echo '  <tbody>';
+
+    // Output de cada linha
+    while ($row2 = $result2->fetch_assoc()) {
+      echo '<tr>';
+      echo '<td>' . $row2["id_curso"] . '</td>';
+      echo '<td>' . $row2["nome_curso"] . '</td>';
+      echo '<td>' . $row2["sigla_curso"] . '</td>';
+      echo '<td><a href="../methods/delete_cursos.php?id_curso=' . $row["id_curso"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta matéria?\')">Remover</a></td>';
+      echo '</tr>';
+    }
+
+    // Fecha a tabela e o container
+    echo '  </tbody>';
+    echo '</table>';
+    echo '</div>';
+  } else {
+    // Mensagem se não houver resultados
+    echo '<div style="margin: 30px auto !important;" class="container mt-4">';
+    echo '<h3
+        id="nome" 
+        class="label-adictional-style form-label" 
+        style="margin-top: 30px; font-size: 1.75rem; font-weight: 500;">
+        Lista de Cursos
+      </h3>';
+    echo '<div style="margin: 30px 0;" class="alert alert-warning">Nenhum resultado encontrado.</div>';
+    echo '</div>';
+  }
+
+  ?>
+
   <h1 style="padding-top: 5.5rem; text-align: center;">CADASTRO DE MATÉRIAS</h1>
 
   <form action="../methods/post_materias.php" method="POST">
