@@ -6,6 +6,11 @@
     font-weight: 500;
     font-size: 18px;
   }
+  .d-flex {
+            display: flex !important;
+            align-items: center;
+            gap: 30px;
+        }
 </style>
 
 <head>

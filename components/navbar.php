@@ -35,7 +35,7 @@ echo '
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin: 0;">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="width: -webkit-fill-available; justify-content: space-between; margin: 0;">
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#">Horários</a>
             </li>
@@ -60,12 +60,15 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1) {
             </li>
             </ul>
         </li>
-        </ul>';
+        </ul>
+        </div>';
+    
 }
 
 // Botão login/logout
 echo '<ul class="d-flex" style="margin: 0;">';
 if (isset($_SESSION['id_professor'])) {
+    echo '<p style="margin: 0; font-weight: 600; font-size: 1.5rem;">Bem Vindo, <spam style="color: #0d6efd;">' . $_SESSION['nome_professor'] . '</spam>!</p>';
     echo '<a style="margin-right: 32px;" href="../methods/logout.php" class="btn btn-outline-danger">Logout</a>';
 } else {
     echo '<a style="margin-right: 32px;" href="../index.php" class="btn btn-outline-success">Login</a>';
@@ -73,7 +76,6 @@ if (isset($_SESSION['id_professor'])) {
 echo '</ul>';
 
 echo '
-    </div>
     </div>
     </nav>
 ';

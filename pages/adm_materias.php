@@ -56,6 +56,11 @@
   .mb-3 {
     width: 50%;
   }
+  .d-flex {
+            display: flex !important;
+            align-items: center;
+            gap: 30px;
+        }
 </style>
 
 </html>

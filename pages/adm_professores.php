@@ -78,6 +78,11 @@ form {
     flex-direction: row;
     align-items: center;
 }
+.d-flex {
+            display: flex !important;
+            align-items: center;
+            gap: 30px;
+        }
 </style>
 
 <body>
@@ -444,6 +449,18 @@ if (!$result) {
 
 include '../components/adm_verification.php';
 
+function mascararCPF($cpf) {
+    // Remove caracteres não numéricos
+    $cpf = preg_replace('/\D/', '', $cpf);
+
+    // Se o CPF for válido (11 dígitos), mascara os primeiros 9
+    if (strlen($cpf) === 11) {
+        return "***.***.***-" . substr($cpf, -2);
+    } else {
+        return "CPF inválido";
+    }
+}
+
 if ($result->num_rows > 0) {
     echo '<div class="container mt-4">';
     echo '<h2>Lista de Professores</h2>';
@@ -458,17 +475,20 @@ if ($result->num_rows > 0) {
             <th style="width: 0 !important"></th>
           </tr></thead><tbody>';
     while ($row = $result->fetch_assoc()) {
+        // Aplica a máscara de CPF
+        $cpf_mascarado = mascararCPF($row['cpf']);
+
         echo "<tr>";
         echo "<td>{$row['id_professor']}</td>";
-        echo "<td><a onclick='openModal(\"{$row['nome_professor']}\", \"{$row['email']}\", \"{$row['cpf']}\")' class='btn btn-link'>{$row['nome_professor']}</a></td>";
+        echo "<td><a onclick='openModal(\"{$row['nome_professor']}\", \"{$row['email']}\", \"{$cpf_mascarado}\")' class='btn btn-link'>{$row['nome_professor']}</a></td>";
         echo "<td>{$row['email']}</td>";
-        echo "<td>{$row['cpf']}</td>";
+        echo "<td>{$cpf_mascarado}</td>";
         echo "<td>{$row['materias']}</td>";
         if ($row['admin'] == 1) {
             echo "<td>Sim</td>";
         } else {
             echo "<td>Não</td>";
-        };
+        }
         
         echo '<td><a href="../methods/delete_professores.php?id_professor=' . $row["id_professor"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
         echo "</tr>";
