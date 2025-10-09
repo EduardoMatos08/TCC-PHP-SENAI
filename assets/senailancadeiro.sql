@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `professores` (
 
 INSERT INTO `professores` (`id_professor`, `nome_professor`, `email`, `senha`, `admin`, `cpf`, `horarios`, `materias`) VALUES
 (0, 'Administrador', 'admin@gmail.com', '$2y$10$9oDpF9dqdLI04iwAie/3A.aoD9Y/l2o8Nvx8UVaXPhMW4tdaa.5DC', 1, '000.000.000-00', '', ''),
-(7, 'Eduardo Penis', 'eduardo@gmail.com', '$2y$10$sE0eSahfkBF5tv43X9Dc/uhQy0n372zl.HXAr.7x07JFupQPm65IO', 0, '000.000.000-00', 'sabado-noite', '');
+(7, 'Eduardo Sexo', 'eduardo@gmail.com', '$2y$10$sE0eSahfkBF5tv43X9Dc/uhQy0n372zl.HXAr.7x07JFupQPm65IO', 0, '000.000.000-00', 'sabado-noite', '');
 
 -- --------------------------------------------------------
 

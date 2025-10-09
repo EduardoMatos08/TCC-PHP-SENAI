@@ -26,7 +26,28 @@ if ($nome_professor == null || $email == null || $senha == null || $cpf == null)
             window.location.href = "../pages/adm_professores.php";
         </script>
     ';
+    exit; // Adicionado exit para parar execução
 } else {
+    // Escapar o email para evitar SQL injection
+    $email_escapado = mysqli_real_escape_string($connection, $email);
+    
+    $sql = "SELECT COUNT(*) AS total FROM professores WHERE email = '$email_escapado'";
+    $resultado = mysqli_query($connection, $sql);
+    
+    if ($resultado) {
+        $linha = mysqli_fetch_assoc($resultado);
+        
+        if ($linha['total'] > 0) {
+            echo '
+                <script>
+                    alert("Outro usuário já tem esse E-mail.");
+                    window.location.href = "../pages/adm_professores.php";
+                </script>
+            ';
+            exit; // Para a execução aqui
+        }
+    }
+    
     // Insere os dados do professor na tabela "professores"
     $sql = "INSERT INTO `professores` (`nome_professor`, `email`, `horarios`, `admin`, `cpf`, `senha`) 
             VALUES ('$nome_professor', '$email', '$horarios', '$admin', '$cpf', '$senha')";
