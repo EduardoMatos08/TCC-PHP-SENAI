@@ -64,7 +64,6 @@
     echo '      <th scope="col">ID</th>';
     echo '      <th scope="col">Nome</th>';
     echo '      <th scope="col">Sigla</th>';
-    echo '      <th scope="col">Carga Horária</th>';
     echo '      <th style="width: 1%;"></th>';
     echo '    </tr>';
     echo '  </thead>';
@@ -76,7 +75,7 @@
       echo '<td>' . $row2["id_curso"] . '</td>';
       echo '<td>' . $row2["nome_curso"] . '</td>';
       echo '<td>' . $row2["sigla_curso"] . '</td>';
-      echo '<td><a href="../methods/delete_cursos.php?id_curso=' . $row["id_curso"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta matéria?\')">Remover</a></td>';
+      echo '<td><a href="../methods/delete_cursos.php?id_curso=' . $row2["id_curso"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta matéria?\')">Remover</a></td>';
       echo '</tr>';
     }
 

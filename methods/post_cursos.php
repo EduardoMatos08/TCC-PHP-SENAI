@@ -5,7 +5,7 @@ include "../connection.php";
 
 // Recebe os valores enviados pelo formulário (via método POST)
 $nome_curso = $_POST['nome_curso']; // Nome da matéria
-$sigla = $_POST['sigla_curso']; // Sigla da matéria (abreviação)
+$sigla_curso = $_POST['sigla_curso']; // Sigla da matéria (abreviação)
 
 // Verifica se algum dos campos obrigatórios não foi preenchido
 if ($nome_curso == null || $sigla_curso == null) {
@@ -21,7 +21,7 @@ if ($nome_curso == null || $sigla_curso == null) {
     // Mostra mensagem de sucesso e redireciona para a mesma página
     echo '
         <script>
-            alert("Curso cadastrada com sucesso!");
+            alert("Curso cadastrado com sucesso!");
             window.location.href = "../pages/adm_materias.php";
         </script>
     ';
