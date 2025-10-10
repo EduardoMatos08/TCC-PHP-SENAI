@@ -83,6 +83,54 @@ form {
             align-items: center;
             gap: 30px;
         }
+    .div-curso-materias {
+        transition: height 0.15s ease-in-out;
+        background-color: #dee2e6;
+        padding: 0;
+        height: 0;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .lista-materias {
+        transition: all 0.1s ease-in-out;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .form-check-group {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    #div-curso {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        margin-bottom: 5px;
+    }
+
+    .dropdown-toggle {
+        background: none;
+        border: none;
+        padding: 10px;
+        color: #6c757d;
+    }
+
+    .dropdown-toggle::after {
+        display: inline-block;
+        margin-left: 0.255em;
+        vertical-align: 0.255em;
+        content: "";
+        border-top: 0.3em solid;
+        border-right: 0.3em solid transparent;
+        border-bottom: 0;
+        border-left: 0.3em solid transparent;
+    }
 </style>
 
 <body>
@@ -141,37 +189,68 @@ form {
         <!-- Modal -->
         <div class="modal fade" id="materiasModal" tabindex="-1" aria-labelledby="materiasModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog" style="max-width: 500px;">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="materiasModalLabel">Selecione as matérias</h5>
+                        <h5 class="modal-title" id="materiasModalLabel">Selecionar Cursos e Matérias</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
-                    <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
-                        <ul class="list-unstyled mb-0">
-                            <?php
-          include "../connection.php";
-          $sqlMaterias = "SELECT id_materia, nome_materia FROM materias";
-          $resultMaterias = $connection->query($sqlMaterias);
+                    <div class="modal-body">
+                        <?php
+                $sqlCursos = "SELECT id_curso, nome_curso, sigla_curso FROM cursos";
+                $resultCursos = $connection->query($sqlCursos);
 
-          if ($resultMaterias->num_rows > 0) {
-            while ($row = $resultMaterias->fetch_assoc()) {
-              echo '<li>';
-              echo '<div class="form-check">';
-              echo '<input class="form-check-input" type="checkbox" name="materias[]" id="materia_' . $row['id_materia'] . '" value="' . $row['id_materia'] . '">';
-              echo '<label class="form-check-label" for="materia_' . $row['id_materia'] . '">' . htmlspecialchars($row['nome_materia']) . '</label>';
-              echo '</div>';
-              echo '</li>';
-            }
-          } else {
-            echo "<li><span class='text-muted'>Nenhuma matéria cadastrada</span></li>";
-          }
-          ?>
-                        </ul>
+                if ($resultCursos->num_rows > 0) {
+                    while ($curso = $resultCursos->fetch_assoc()) {
+                        echo '
+                        <div id="div-curso">
+                            <h3>' . htmlspecialchars($curso["nome_curso"]) . ' - ' . htmlspecialchars($curso["sigla_curso"]) . '</h3>
+                            <button onClick="openDropdown(event)" class="dropdown-toggle" type="button"></button>
+                        </div>
+                        <div class="div-curso-materias">
+                            <div id="div-expansora" style="padding: 20px;">
+                                <div class="lista-materias">';
+                        
+                        $sqlMaterias = "SELECT id_materia, nome_materia, sigla, carga_horaria FROM materias";
+                        $resultMaterias = $connection->query($sqlMaterias);
+
+                        while ($materia = $resultMaterias->fetch_assoc()) {
+                            echo '
+                                <div class="form-check d-flex justify-content-between align-items-center p-2 border-bottom">
+                                    <label class="form-check-label">
+                                        ' . htmlspecialchars($materia["nome_materia"]) . ' - ' . htmlspecialchars($materia["sigla"]) . 
+                                        ' ('. htmlspecialchars($materia["carga_horaria"]) .' Horas)
+                                    </label>
+                                    <div class="form-check-group">
+                                        <div class="form-check">
+                                            <label class="form-check-label">N1</label>
+                                            <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n1" class="form-check-input">
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">N2</label>
+                                            <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n2" class="form-check-input">
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">N3</label>
+                                            <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n3" class="form-check-input">
+                                        </div>
+                                    </div>
+                                </div>';
+                        }
+
+                        echo '
+                                </div>
+                            </div>
+                        </div>';
+                    }
+                } else {
+                    echo '<div class="alert alert-warning">Nenhum curso cadastrado.</div>';
+                }
+                ?>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Selecionar</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salvar</button>
                     </div>
                 </div>
             </div>
@@ -368,27 +447,65 @@ function mascara(i) {
 
 }
 
-function openModal(name_professor, email, cpf) {
-    // Cria o conteúdo do modal
+function openModal(name_professor, email, cpf, materias_competencias) {
+    // Formata as competências em uma lista
+    let competenciasHtml = '';
+    if (materias_competencias && materias_competencias !== 'null') {
+        const items = materias_competencias.split(',');
+        const cursos = {};
+        
+        // Agrupa por curso
+        items.forEach(item => {
+            const [curso, resto] = item.split('###');
+            if (!curso || !resto) return;
+            
+            if (!cursos[curso]) {
+                cursos[curso] = [];
+            }
+            cursos[curso].push(resto);
+        });
+
+        // Gera o HTML
+        const competenciaColors = {
+            'N1': '#dc3545',  // Vermelho (Bootstrap danger)
+            'N2': '#ffc107',  // Amarelo (Bootstrap warning)
+            'N3': '#198754'   // Verde (Bootstrap success)
+        };
+
+        competenciasHtml = '<ul style="list-style-type: none; padding-left: 0;">';
+        for (const [curso, materias] of Object.entries(cursos)) {
+            competenciasHtml += `<li><strong>Curso: ${curso}</strong><ul style="list-style-type: none;">`;
+            materias.forEach(materia => {
+                // Extrai o tipo de nota (N1, N2 ou N3) do final da string
+                const competencia = materia.split(':').pop().trim();
+                const materiaInfo = materia.split(':')[0];
+                competenciasHtml += `<li>• ${materiaInfo}: <strong style="color: ${competenciaColors[competencia]}">${competencia}</strong></li>`;
+            });
+            competenciasHtml += '</ul></li>';
+        }
+        competenciasHtml += '</ul>';
+    } else {
+        competenciasHtml = 'Nenhuma competência atribuída';
+    }
+
     const modalContent = `
       <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div style="display: flex; justify-content: center;" class="modal-dialog">
           <div style="align-self: center; width: 70vw; padding: 2%;" class="modal-content">
-
             <div class="modal-header">
               <h5 class="modal-title" id="infoModalLabel">Informações do Professor</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="modal-body">
               <p><strong>Nome:</strong> ${name_professor}</p>
               <p><strong>Email:</strong> ${email}</p>
               <p><strong>CPF:</strong> ${cpf}</p>
+              <p style="text-align: center;"><strong>COMPETÊNCIAS</strong></p>
+              ${competenciasHtml}
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </div>
-
           </div>
         </div>
       </div>
@@ -422,6 +539,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Adicione esta função para controlar o dropdown
+function openDropdown(event) {
+        const button = event.currentTarget;
+        const container = button.closest('#div-curso').nextElementSibling;
+        const content = container.querySelector('#div-expansora');
+        
+        if (container.style.height === '0px' || container.style.height === '') {
+            container.style.height = content.offsetHeight + 'px';
+        } else {
+            container.style.height = '0px';
+        }
+    }
 </script>
 
 </html>
@@ -434,12 +564,20 @@ $sql = "SELECT
             p.nome_professor, 
             p.email,
             p.admin,
-            p.cpf, 
-            GROUP_CONCAT(m.nome_materia SEPARATOR ', ') AS materias
+            p.cpf,
+            COALESCE(GROUP_CONCAT(
+                DISTINCT CONCAT(
+                    c.nome_curso, '###',
+                    m.nome_materia, ' - ',
+                    m.sigla, ': ',
+                    UPPER(pcm.tipo_nota)
+                ) ORDER BY c.nome_curso
+            ), '') as materias_competencias
         FROM professores p
-        LEFT JOIN professor_materia pm ON p.id_professor = pm.id_professor
-        LEFT JOIN materias m ON pm.id_materia = m.id_materia
-        GROUP BY p.id_professor";
+        LEFT JOIN professor_curso_materia pcm ON p.id_professor = pcm.id_professor
+        LEFT JOIN materias m ON pcm.id_materia = m.id_materia
+        LEFT JOIN cursos c ON pcm.id_curso = c.id_curso
+        GROUP BY p.id_professor, p.nome_professor, p.email, p.admin, p.cpf";
 
 $result = $connection->query($sql);
 
@@ -470,7 +608,6 @@ if ($result->num_rows > 0) {
             <th>Nome</th>
             <th>Email</th>
             <th>CPF</th>
-            <th>Matérias</th>
             <th>Administrador</th>
             <th style="width: 0 !important"></th>
           </tr></thead><tbody>';
@@ -480,10 +617,10 @@ if ($result->num_rows > 0) {
 
         echo "<tr>";
         echo "<td>{$row['id_professor']}</td>";
-        echo "<td><a onclick='openModal(\"{$row['nome_professor']}\", \"{$row['email']}\", \"{$cpf_mascarado}\")' class='btn btn-link'>{$row['nome_professor']}</a></td>";
+        echo "<td><a onclick='openModal(\"{$row['nome_professor']}\", \"{$row['email']}\", \"{$cpf_mascarado}\", \"{$row['materias_competencias']}\")' class='btn btn-link'>{$row['nome_professor']}</a></td>";
         echo "<td>{$row['email']}</td>";
         echo "<td>{$cpf_mascarado}</td>";
-        echo "<td>{$row['materias']}</td>";
+        // echo "<td>{$row['materias_competencias']}</td>"; // Removida coluna de matérias
         if ($row['admin'] == 1) {
             echo "<td>Sim</td>";
         } else {

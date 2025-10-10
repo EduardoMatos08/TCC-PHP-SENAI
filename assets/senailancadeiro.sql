@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `cursos` (
   `sigla_curso` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `id_curso` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id_curso`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `cursos`
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `curso_materias` (
   PRIMARY KEY (`id`),
   KEY `id_curso` (`id_curso`),
   KEY `id_materia` (`id_materia`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -122,6 +122,19 @@ CREATE TABLE IF NOT EXISTS `professor_materia` (
   KEY `fk_materia` (`id_materia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Adicionar tabela de notas após a tabela professor_materia
+CREATE TABLE IF NOT EXISTS `professor_curso_materia` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_professor` int NOT NULL,
+  `id_curso` int NOT NULL,
+  `id_materia` int NOT NULL,
+  `tipo_nota` ENUM('n1', 'n2', 'n3') NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_prof_curso_mat_professor` (`id_professor`),
+  KEY `fk_prof_curso_mat_curso` (`id_curso`),
+  KEY `fk_prof_curso_mat_materia` (`id_materia`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 --
 -- Restrições para despejos de tabelas
 --
@@ -132,8 +145,17 @@ CREATE TABLE IF NOT EXISTS `professor_materia` (
 ALTER TABLE `professor_materia`
   ADD CONSTRAINT `fk_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_professor` FOREIGN KEY (`id_professor`) REFERENCES `professores` (`id_professor`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- Adicionar constraints
+ALTER TABLE `professor_curso_materia`
+  ADD CONSTRAINT `fk_prof_curso_mat_professor` FOREIGN KEY (`id_professor`) REFERENCES `professores` (`id_professor`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_prof_curso_mat_curso` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_prof_curso_mat_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON DELETE CASCADE;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

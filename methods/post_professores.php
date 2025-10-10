@@ -6,16 +6,10 @@ include "../connection.php";
 $nome_professor = $_POST['nome_professor'];
 $cpf = $_POST['cpf'];
 $email = $_POST['email'];
-$admin = $_POST['admin'];
-
-// Criptografa a senha corretamente
+$admin = isset($_POST['admin']) ? $_POST['admin'] : 0; // Corrigido
 $senha = $_POST['senha'];
 $senha = password_hash($senha, PASSWORD_DEFAULT);
-
 $horarios = $_POST['horarios'];
-
-// Verifica se matérias foram enviadas; se não, define como array vazio
-$materias = isset($_POST['materias']) ? $_POST['materias'] : [];
 
 // Verifica se algum campo obrigatório está vazio
 if ($nome_professor == null || $email == null || $senha == null || $cpf == null) {
@@ -48,30 +42,50 @@ if ($nome_professor == null || $email == null || $senha == null || $cpf == null)
         }
     }
     
-    // Insere os dados do professor na tabela "professores"
-    $sql = "INSERT INTO `professores` (`nome_professor`, `email`, `horarios`, `admin`, `cpf`, `senha`) 
-            VALUES ('$nome_professor', '$email', '$horarios', '$admin', '$cpf', '$senha')";
-    $inserir = mysqli_query($connection, $sql);
+    // Inicia transação
+    mysqli_begin_transaction($connection);
 
-    // Recupera o ID gerado automaticamente para esse professor (chave primária)
-    $id_professor = mysqli_insert_id($connection);
+    try {
+        // Insere professor
+        $sql = "INSERT INTO professores (nome_professor, email, horarios, admin, cpf, senha) 
+                VALUES (?, ?, ?, ?, ?, ?)";
+        
+        $stmt = mysqli_prepare($connection, $sql);
+        mysqli_stmt_bind_param($stmt, "ssssss", $nome_professor, $email, $horarios, $admin, $cpf, $senha);
+        mysqli_stmt_execute($stmt);
+        
+        $id_professor = mysqli_insert_id($connection);
 
-    // Se o professor tiver matérias associadas
-    if (!empty($materias)) {
-        // Percorre cada matéria selecionada e cria uma relação na tabela intermediária
-        foreach ($materias as $id_materia) {
-            $sqlRelacao = "INSERT INTO professor_materia (id_professor, id_materia) 
-                           VALUES ('$id_professor', '$id_materia')";
-            mysqli_query($connection, $sqlRelacao);
+        // Processa competências
+        if (isset($_POST['competencia']) && is_array($_POST['competencia'])) {
+            foreach ($_POST['competencia'] as $id_curso => $materias) {
+                foreach ($materias as $id_materia => $tipo_nota) {
+                    $sql_comp = "INSERT INTO professor_curso_materia (id_professor, id_curso, id_materia, tipo_nota) 
+                                VALUES (?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($connection, $sql_comp);
+                    mysqli_stmt_bind_param($stmt, "iiis", $id_professor, $id_curso, $id_materia, $tipo_nota);
+                    mysqli_stmt_execute($stmt);
+                }
+            }
         }
-    }
 
-    // Mostra mensagem de sucesso e redireciona para a página de administração de professores
-    echo '
-        <script>
-            alert("Professor cadastrado com sucesso!");
-            window.location.href = "../pages/adm_professores.php";
-        </script>
-    ';
+        mysqli_commit($connection);
+        
+        // Mostra mensagem de sucesso e redireciona para a página de administração de professores
+        echo '
+            <script>
+                alert("Professor cadastrado com sucesso!");
+                window.location.href = "../pages/adm_professores.php";
+            </script>
+        ';
+    } catch (Exception $e) {
+        mysqli_rollback($connection);
+        echo '
+            <script>
+                alert("Erro ao cadastrar professor: ' . $e->getMessage() . '");
+                window.location.href = "../pages/adm_professores.php";
+            </script>
+        ';
+    }
 }
 ?>
