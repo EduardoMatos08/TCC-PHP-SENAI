@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 10-Out-2025 às 12:16
+-- Tempo de geração: 10-Out-2025 às 13:51
 -- Versão do servidor: 8.0.31
 -- versão do PHP: 8.0.26
 
@@ -29,25 +29,34 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `cursos`;
 CREATE TABLE IF NOT EXISTS `cursos` (
+  `nome_curso` varchar(100) NOT NULL,
+  `sigla_curso` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `id_curso` int NOT NULL AUTO_INCREMENT,
-  `nome_curso` varchar(255) DEFAULT NULL,
-  `sigla_curso` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_curso`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `cursos`
+--
+
+INSERT INTO `cursos` (`nome_curso`, `sigla_curso`, `id_curso`) VALUES
+('Teste', 'TST', 3);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `cursos_materias`
+-- Estrutura da tabela `curso_materias`
 --
 
-DROP TABLE IF EXISTS `cursos_materias`;
-CREATE TABLE IF NOT EXISTS `cursos_materias` (
+DROP TABLE IF EXISTS `curso_materias`;
+CREATE TABLE IF NOT EXISTS `curso_materias` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `id_curso` int NOT NULL,
   `id_materia` int NOT NULL,
-  PRIMARY KEY (`id_curso`,`id_materia`),
+  PRIMARY KEY (`id`),
+  KEY `id_curso` (`id_curso`),
   KEY `id_materia` (`id_materia`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -62,14 +71,15 @@ CREATE TABLE IF NOT EXISTS `materias` (
   `carga_horaria` int NOT NULL,
   `id_materia` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id_materia`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `materias`
 --
 
 INSERT INTO `materias` (`nome_materia`, `sigla`, `carga_horaria`, `id_materia`) VALUES
-('Análise de Eduardos em Banheiras', 'ANAL-EB', 1200, 8);
+('Análise de Eduardos em Banheiras', 'ANAL-EB', 1200, 8),
+('Cobre', 'CU', 1, 9);
 
 -- --------------------------------------------------------
 
