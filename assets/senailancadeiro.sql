@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 07-Out-2025 às 14:09
+-- Tempo de geração: 10-Out-2025 às 12:16
 -- Versão do servidor: 8.0.31
 -- versão do PHP: 8.0.26
 
@@ -20,6 +20,34 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `senailancadeiro`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `cursos`
+--
+
+DROP TABLE IF EXISTS `cursos`;
+CREATE TABLE IF NOT EXISTS `cursos` (
+  `id_curso` int NOT NULL AUTO_INCREMENT,
+  `nome_curso` varchar(255) DEFAULT NULL,
+  `sigla_curso` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id_curso`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `cursos_materias`
+--
+
+DROP TABLE IF EXISTS `cursos_materias`;
+CREATE TABLE IF NOT EXISTS `cursos_materias` (
+  `id_curso` int NOT NULL,
+  `id_materia` int NOT NULL,
+  PRIMARY KEY (`id_curso`,`id_materia`),
+  KEY `id_materia` (`id_materia`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
