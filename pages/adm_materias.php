@@ -23,8 +23,7 @@
       background-color: #e9ecef;
       justify-content: space-between;
       padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 5px;
+      border-bottom: solid #c0c0c0ff;
     }
 
     h3 {
@@ -45,13 +44,20 @@
     }
 
     .div-curso-materias {
-      transition: all 0.2s ease-in;
+      transition: height 0.15s ease-in-out;
       background-color: #dee2e6;
       padding: 0;
       height: 0;
       overflow: hidden;
-      border-radius: 10px;
       margin-bottom: 20px;
+    }
+
+    #div-expansora {
+      padding: 20px;
+    }
+
+    .lista-materias {
+      transition: all 0.1s ease-in-out;
     }
 
     .mb-3 {
@@ -59,14 +65,27 @@
     }
 
     .d-flex {
-      display: flex !important;
+      display: flex;
       align-items: center;
       gap: 30px;
     }
 
     .form-check {
-      transition: all 0.1s ease-in;
+      transition: all 0.3s ease-in-out;
       border-radius: 5px;
+      display: flex;
+      align-items: center;
+      opacity: 1;
+      max-height: 50px;
+      margin-bottom: 5px;
+    }
+
+    .form-check.hidden {
+      opacity: 0;
+      max-height: 0;
+      margin: 0;
+      padding: 0 !important;
+      overflow: hidden;
     }
 
     .form-check:hover {
@@ -123,33 +142,65 @@
       echo '<div class="div-curso-materias">';
 
       // Buscar matérias
-      $sqlMaterias = "SELECT id_materia, nome_materia, sigla FROM materias";
-      $resultMaterias = $connection->query($sqlMaterias);
+      // Primeiro busca as matérias relacionadas ao curso
+      $sqlMateriasRelacionadas = "SELECT m.id_materia, m.nome_materia, m.sigla, m.carga_horaria 
+                                 FROM materias m 
+                                 INNER JOIN curso_materias cm ON m.id_materia = cm.id_materia 
+                                 WHERE cm.id_curso = $idCurso";
+      
+      // Depois busca as matérias não relacionadas
+      $sqlMateriasNaoRelacionadas = "SELECT m.id_materia, m.nome_materia, m.sigla, m.carga_horaria 
+                                    FROM materias m 
+                                    WHERE m.id_materia NOT IN (
+                                      SELECT id_materia FROM curso_materias WHERE id_curso = $idCurso
+                                    )";
+
+      $resultMateriasRelacionadas = $connection->query($sqlMateriasRelacionadas);
+      $resultMateriasNaoRelacionadas = $connection->query($sqlMateriasNaoRelacionadas);
 
       echo '
-        <div style="padding: 20px;">
+        <div id="div-expansora" style="padding: 20px;">
           <h5 style="margin-bottom: 15px;">Adicionar matérias ao curso</h5>
           <input type="text" class="form-control mb-3" placeholder="Pesquisar matéria..." oninput="filtrarMaterias(event)" data-curso-id="' . $idCurso . '" />
 
 
           <form action="../methods/post_curso_materias.php" method="POST">
             <input type="hidden" name="id_curso" value="' . $idCurso . '">
-            <div id="lista-materias-' . $idCurso . '" style="max-height: 200px; overflow-y: auto;">';
+            <div id="lista-materias-' . $idCurso . '" class="lista-materias">';
 
-      if ($resultMaterias->num_rows > 0) {
-        while ($materia = $resultMaterias->fetch_assoc()) {
+      // Exibe matérias relacionadas
+      if ($resultMateriasRelacionadas->num_rows > 0) {
+        while ($materia = $resultMateriasRelacionadas->fetch_assoc()) {
           echo '
-              <div class="form-check d-flex justify-content-between align-items-center p-2 border-bottom">
+              <div class="form-check justify-content-between align-items-center p-2 border-bottom">
                 <label class="form-check-label" for="materia-' . $idCurso . '-' . $materia["id_materia"] . '">'
-                  . htmlspecialchars($materia["nome_materia"]) . ' (' . htmlspecialchars($materia["sigla"]) . ')
+                  . htmlspecialchars($materia["nome_materia"]) . ' - ' . htmlspecialchars($materia["sigla"]) . ' ('. htmlspecialchars($materia["carga_horaria"]) .' Horas)
+                </label>
+                <input class="form-check-input" type="checkbox" checked
+                  name="materias[]" value="' . $materia["id_materia"] . '"
+                  id="materia-' . $idCurso . '-' . $materia["id_materia"] . '">
+              </div>';
+        }
+        
+        // Adiciona divisor se houver matérias não relacionadas
+        if ($resultMateriasNaoRelacionadas->num_rows > 0) {
+          echo '<div class="dropdown-divider my-3"></div>';
+        }
+      }
+
+      // Exibe matérias não relacionadas
+      if ($resultMateriasNaoRelacionadas->num_rows > 0) {
+        while ($materia = $resultMateriasNaoRelacionadas->fetch_assoc()) {
+          echo '
+              <div class="form-check justify-content-between align-items-center p-2 border-bottom">
+                <label class="form-check-label" for="materia-' . $idCurso . '-' . $materia["id_materia"] . '">'
+                  . htmlspecialchars($materia["nome_materia"]) . ' - ' . htmlspecialchars($materia["sigla"]) . ' ('. htmlspecialchars($materia["carga_horaria"]) .' Horas)
                 </label>
                 <input class="form-check-input" type="checkbox"
                   name="materias[]" value="' . $materia["id_materia"] . '"
                   id="materia-' . $idCurso . '-' . $materia["id_materia"] . '">
               </div>';
         }
-      } else {
-        echo '<div class="alert alert-warning">Nenhuma matéria cadastrada.</div>';
       }
 
       echo '
@@ -198,8 +249,13 @@
     function openDropdown(event) {
       const button = event.currentTarget;
       const container = button.closest('#div-curso').nextElementSibling;
-      const aberto = container.style.height === 'auto';
-      container.style.height = aberto ? '0' : 'auto';
+      const content = container.querySelector('#div-expansora');
+      
+      if (container.style.height === '0px' || container.style.height === '') {
+        container.style.height = content.offsetHeight + 'px';
+      } else {
+        container.style.height = '0px';
+      }
     }
 
     // Filtro de matérias
@@ -213,38 +269,42 @@
       const input = event.target;
       const idCurso = input.dataset.cursoId;
       const filtro = normalizeString(input.value.trim());
-      const divLista = document.getElementById('lista-materias-' + idCurso);
+      const divLista = document.getElementById(`lista-materias-${idCurso}`);
+      const container = input.closest('.div-curso-materias');
+      const content = container.querySelector('#div-expansora');
+      
       if (!divLista) return;
 
-      const itens = divLista.getElementsByClassName('form-check');
+      const materias = divLista.querySelectorAll('.form-check');
       let anyVisible = false;
 
-      for (let i = 0; i < itens.length; i++) {
-        const label = itens[i].querySelector('.form-check-label');
-        const texto = normalizeString(label ? label.innerText : itens[i].innerText);
+      materias.forEach(item => {
+        const label = item.querySelector('.form-check-label');
+        if (!label) return;
+        
+        const texto = normalizeString(label.textContent);
+        const matches = texto.includes(filtro);
+        
+        item.style.display = matches ? 'flex' : 'none';
+        if (matches) anyVisible = true;
+      });
 
-        if (filtro === '' || texto.indexOf(filtro) !== -1) {
-          itens[i].style.display = ''; // mostra
-          anyVisible = true;
-        } else {
-          itens[i].style.display = 'none'; // esconde
-        }
-      }
+      // Remove mensagem antiga se existir
+      const oldMessage = divLista.querySelector('.no-results-msg');
+      if (oldMessage) oldMessage.remove();
 
-      // Mensagem "Nenhuma matéria encontrada."
-      const parent = divLista.parentElement;
-      let noResults = parent.querySelector('.no-results-msg');
-
+      // Adiciona mensagem de "nenhum resultado" se necessário
       if (!anyVisible) {
-        if (!noResults) {
-          noResults = document.createElement('div');
-          noResults.className = 'no-results-msg mt-2 alert alert-warning';
-          noResults.textContent = 'Nenhuma matéria encontrada.';
-          parent.appendChild(noResults);
-        }
-      } else if (noResults) {
-        noResults.remove();
+        const message = document.createElement('div');
+        message.className = 'no-results-msg alert alert-warning mt-2';
+        message.textContent = 'Nenhuma matéria encontrada.';
+        divLista.appendChild(message);
       }
+
+      // Recalcula e atualiza a altura do dropdown após a animação
+      setTimeout(() => {
+        container.style.height = content.offsetHeight + 'px';
+      }, 300);
     }
 
   </script>
@@ -298,6 +358,9 @@ if ($result->num_rows > 0) {
     <div class="container mt-4">
       <h3 style="font-size: 1.75rem; font-weight: 500;">Lista de Matérias</h3>
       <div class="alert alert-warning mt-3">Nenhum resultado encontrado.</div>
+    </div>';
+}
+?>
     </div>';
 }
 ?>
