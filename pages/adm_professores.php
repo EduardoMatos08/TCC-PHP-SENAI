@@ -7,12 +7,11 @@
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>ADM - Professores</title>
     <!-- Importação dos Scripts e Estilos - Status: Funcionando -->
     <link rel="stylesheet" href="../bootstrap-styles/bootstrap.css" />
     <script src="../bootstrap-styles/bootstrap.js"></script>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.png">
-
 
 </head>
 
@@ -143,6 +142,10 @@ form {
     .alert-secondary{
         margin: 0;
     }
+
+    #caractere-especial {
+        font-weight: bold;
+    }
 </style>
 
 <body>
@@ -159,6 +162,7 @@ form {
             <div class="mb-3">
                 <label id="nome" for="exampleInputEmail1" class="label-adictional-style form-label">Nome</label>
                 <input class="form-control" name="nome_professor" aria-describedby="emailHelp" />
+                <p id="caractere-especial">Não utilize: ', ", /, &, =, +, #, $, @, ?, ,, ., <, ></p></span>
             </div>
 
             <div class="mb-3">

@@ -11,6 +11,23 @@ $senha = $_POST['senha'];
 $senha = password_hash($senha, PASSWORD_DEFAULT);
 $horarios = $_POST['horarios'];
 
+function containsAnyCharacter(string $nome_professor, array $char): bool
+{
+    foreach ($char as $c) {
+        if (strpos($nome_professor, $c) !== false) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Example usage
+$char = ["'", "/", "&", '"', "=", "+", "#", "$", "@", "?", ".", "<", ">"];
+
+$position = containsAnyCharacter($nome_professor, $char);
+
+echo '<script>var_dump('.$position.')</script>'; // bool(true)
+
 // Verifica se algum campo obrigatório está vazio
 if ($nome_professor == null || $email == null || $senha == null || $cpf == null) {
     // Caso falte campo, mostra alerta e redireciona de volta para a página de cadastro
@@ -21,6 +38,13 @@ if ($nome_professor == null || $email == null || $senha == null || $cpf == null)
         </script>
     ';
     exit; // Adicionado exit para parar execução
+} if ($position !== false) {
+    echo '
+        <script>
+            alert("Não utilize caracteres especiais.");
+            window.location.href = "../pages/adm_professores.php";
+        </script>
+    ';
 } else {
     // Escapar o email para evitar SQL injection
     $email_escapado = mysqli_real_escape_string($connection, $email);
