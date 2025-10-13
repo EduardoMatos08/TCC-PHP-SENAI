@@ -131,6 +131,18 @@ form {
         border-bottom: 0;
         border-left: 0.3em solid transparent;
     }
+
+    .form-check-group {
+        width: 30%;
+    }
+    .form-check {
+        width: 100%;
+        justify-content: space-between;
+        padding: 0 8.5px;
+    }
+    .alert-secondary{
+        margin: 0;
+    }
 </style>
 
 <body>
@@ -196,57 +208,68 @@ form {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        <?php
-                $sqlCursos = "SELECT id_curso, nome_curso, sigla_curso FROM cursos";
-                $resultCursos = $connection->query($sqlCursos);
+                    <?php
+$sqlCursos = "SELECT id_curso, nome_curso, sigla_curso FROM cursos";
+$resultCursos = $connection->query($sqlCursos);
 
-                if ($resultCursos->num_rows > 0) {
-                    while ($curso = $resultCursos->fetch_assoc()) {
-                        echo '
-                        <div id="div-curso">
-                            <h3>' . htmlspecialchars($curso["nome_curso"]) . ' - ' . htmlspecialchars($curso["sigla_curso"]) . '</h3>
-                            <button onClick="openDropdown(event)" class="dropdown-toggle" type="button"></button>
-                        </div>
-                        <div class="div-curso-materias">
-                            <div id="div-expansora" style="padding: 20px;">
-                                <div class="lista-materias">';
-                        
-                        $sqlMaterias = "SELECT id_materia, nome_materia, sigla, carga_horaria FROM materias";
-                        $resultMaterias = $connection->query($sqlMaterias);
+if ($resultCursos->num_rows > 0) {
+    while ($curso = $resultCursos->fetch_assoc()) {
+        echo '
+        <div id="div-curso">
+            <h3>' . htmlspecialchars($curso["nome_curso"]) . ' - ' . htmlspecialchars($curso["sigla_curso"]) . '</h3>
+            <button onClick="openDropdown(event)" class="dropdown-toggle" type="button"></button>
+        </div>
+        <div class="div-curso-materias">
+            <div id="div-expansora" style="padding: 20px;">
+                <div class="lista-materias">';
 
-                        while ($materia = $resultMaterias->fetch_assoc()) {
-                            echo '
-                                <div class="form-check d-flex justify-content-between align-items-center p-2 border-bottom">
-                                    <label class="form-check-label">
-                                        ' . htmlspecialchars($materia["nome_materia"]) . ' - ' . htmlspecialchars($materia["sigla"]) . 
-                                        ' ('. htmlspecialchars($materia["carga_horaria"]) .' Horas)
-                                    </label>
-                                    <div class="form-check-group">
-                                        <div class="form-check">
-                                            <label class="form-check-label">N1</label>
-                                            <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n1" class="form-check-input">
-                                        </div>
-                                        <div class="form-check">
-                                            <label class="form-check-label">N2</label>
-                                            <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n2" class="form-check-input">
-                                        </div>
-                                        <div class="form-check">
-                                            <label class="form-check-label">N3</label>
-                                            <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n3" class="form-check-input">
-                                        </div>
-                                    </div>
-                                </div>';
-                        }
+        // Buscar apenas matérias relacionadas ao curso atual
+        $sqlMaterias = "
+            SELECT m.id_materia, m.nome_materia, m.sigla, m.carga_horaria
+            FROM materias m
+            INNER JOIN curso_materias cm ON m.id_materia = cm.id_materia
+            WHERE cm.id_curso = " . (int)$curso['id_curso'];
 
-                        echo '
-                                </div>
+        $resultMaterias = $connection->query($sqlMaterias);
+
+        if ($resultMaterias && $resultMaterias->num_rows > 0) {
+            while ($materia = $resultMaterias->fetch_assoc()) {
+                echo '
+                    <div class="form-check d-flex justify-content-between align-items-center p-2 border-bottom">
+                        <label class="form-check-label">
+                            ' . htmlspecialchars($materia["nome_materia"]) . ' - ' . htmlspecialchars($materia["sigla"]) . 
+                            ' (' . htmlspecialchars($materia["carga_horaria"]) . ' Horas)
+                        </label>
+                        <div class="form-check-group">
+                            <div class="form-check">
+                                <label class="form-check-label">N1</label>
+                                <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n1" class="form-check-input">
                             </div>
-                        </div>';
-                    }
-                } else {
-                    echo '<div class="alert alert-warning">Nenhum curso cadastrado.</div>';
-                }
-                ?>
+                            <div class="form-check">
+                                <label class="form-check-label">N2</label>
+                                <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n2" class="form-check-input">
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">N3</label>
+                                <input type="radio" name="competencia[' . $curso["id_curso"] . '][' . $materia["id_materia"] . ']" value="n3" class="form-check-input">
+                            </div>
+                        </div>
+                    </div>';
+            }
+        } else {
+            echo '<div class="alert alert-secondary">Nenhuma matéria vinculada a este curso.</div>';
+        }
+
+        echo '
+                </div>
+            </div>
+        </div>';
+    }
+} else {
+    echo '<div class="alert alert-warning">Nenhum curso cadastrado.</div>';
+}
+?>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Selecionar</button>
