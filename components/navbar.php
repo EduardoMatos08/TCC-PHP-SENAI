@@ -28,14 +28,14 @@ echo '
     <!-- Navbar -->
     <nav style="z-index: 5; margin: 0; border-bottom: solid #0000004d 2px; position: fixed; width: 100vw;" class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-        <a class="navbar-brand" href="./home.php">Lançadeiro Senai</a>
+        <a class="navbar-brand" href="#">Lançadeiro Senai</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="width: -webkit-fill-available; justify-content: space-between; margin: 0;">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Horários</a>
+                <a class="nav-link active" aria-current="page" href="./home.php">Horários</a>
             </li>
 ';
 
