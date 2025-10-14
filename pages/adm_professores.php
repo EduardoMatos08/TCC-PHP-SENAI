@@ -146,6 +146,41 @@ form {
     #caractere-especial {
         font-weight: bold;
     }
+    .modal {
+  display: none; /* Escondido por padrão */
+  position: fixed; /* Fica por cima de tudo */
+  z-index: 1; /* Fica no topo */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7); /* Fundo escuro semitransparente */
+}
+
+.modal-conteudo {
+  background-color: #fefefe;
+  margin: 15% auto; /* Centraliza verticalmente e horizontalmente */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Largura do modal */
+  position: relative;
+  text-align: center;
+}
+
+.fechar {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.fechar:hover,
+.fechar:focus {
+  color: black;
+  text-decoration: none;
+}
+
 </style>
 
 <body>
@@ -162,7 +197,7 @@ form {
             <div class="mb-3">
                 <label id="nome" for="exampleInputEmail1" class="label-adictional-style form-label">Nome</label>
                 <input class="form-control" name="nome_professor" aria-describedby="emailHelp" />
-                <p id="caractere-especial">Não utilize: ', ", /, &, =, +, #, $, @, ?, ,, ., <, ></p></span>
+                <p id="caractere-especial">Não utilize caracteres especiais.</p>
             </div>
 
             <div class="mb-3">
@@ -197,7 +232,12 @@ form {
         </div>
 
 
-
+        <div id="meuModal" class="modal">
+  <div class="modal-conteudo">
+    <span class="fechar" onclick="fecharModal()">&times;</span>
+    <img id="imagemNoModal" src="caminho/para/sua-imagem.png" alt="Descrição da imagem">
+  </div>
+</div>
 
 
 
@@ -405,6 +445,25 @@ if ($resultCursos->num_rows > 0) {
 </body>
 
 <script>
+
+function mostrarModal() {
+  const modal = document.getElementById("meuModal");
+  modal.style.display = "block";
+}
+
+function fecharModal() {
+  const modal = document.getElementById("meuModal");
+  modal.style.display = "none";
+}
+
+// Fechar o modal clicando fora dele
+window.onclick = function(event) {
+  const modal = document.getElementById("meuModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 
 // Seleciona todos os botões toggle
 const toggles = document.querySelectorAll(".toggle-btn");

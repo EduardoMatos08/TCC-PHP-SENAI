@@ -23,8 +23,10 @@ function containsAnyCharacter(string $nome_professor, array $char): bool
 
 // Example usage
 $char = ["'", "/", "&", '"', "=", "+", "#", "$", "@", "?", ".", "<", ">"];
+$char2 = ["roger", "lakoski"];
 
 $position = containsAnyCharacter($nome_professor, $char);
+$position2 = containsAnyCharacter(strtolower($nome_professor), $char2);
 
 echo '<script>var_dump('.$position.')</script>'; // bool(true)
 
@@ -96,12 +98,22 @@ if ($nome_professor == null || $email == null || $senha == null || $cpf == null)
         mysqli_commit($connection);
         
         // Mostra mensagem de sucesso e redireciona para a página de administração de professores
-        echo '
-            <script>
-                alert("Professor cadastrado com sucesso!");
-                window.location.href = "../pages/adm_professores.php";
-            </script>
-        ';
+        if ($position2 !== false) {
+            echo '
+                <script>
+                    alert("SFD, é o Roger kkkkkkkkkkkkk! Tománucu");
+                    window.location.href = "../assets/roger.jpg";
+                </script>
+            ';
+        } else {
+            echo '
+                <script>
+                    alert("Professor cadastrado com sucesso!");
+                    window.location.href = "../pages/adm_professores.php";
+                </script>
+            ';
+        }
+        
     } catch (Exception $e) {
         mysqli_rollback($connection);
         echo '
