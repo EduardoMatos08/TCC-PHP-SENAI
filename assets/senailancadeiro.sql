@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 10-Out-2025 às 13:51
+-- Tempo de geração: 20-Out-2025 às 13:27
 -- Versão do servidor: 8.0.31
 -- versão do PHP: 8.0.26
 
@@ -111,6 +111,25 @@ INSERT INTO `professores` (`id_professor`, `nome_professor`, `email`, `senha`, `
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `professor_curso_materia`
+--
+
+DROP TABLE IF EXISTS `professor_curso_materia`;
+CREATE TABLE IF NOT EXISTS `professor_curso_materia` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `id_professor` int NOT NULL,
+  `id_curso` int NOT NULL,
+  `id_materia` int NOT NULL,
+  `tipo_nota` enum('n1','n2','n3') NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_prof_curso_mat_professor` (`id_professor`),
+  KEY `fk_prof_curso_mat_curso` (`id_curso`),
+  KEY `fk_prof_curso_mat_materia` (`id_materia`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `professor_materia`
 --
 
@@ -122,22 +141,46 @@ CREATE TABLE IF NOT EXISTS `professor_materia` (
   KEY `fk_materia` (`id_materia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Adicionar tabela de notas após a tabela professor_materia
-CREATE TABLE IF NOT EXISTS `professor_curso_materia` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `id_professor` int NOT NULL,
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `turmas`
+--
+
+DROP TABLE IF EXISTS `turmas`;
+CREATE TABLE IF NOT EXISTS `turmas` (
+  `id_turma` int NOT NULL AUTO_INCREMENT,
+  `nome_turma` varchar(255) NOT NULL,
+  PRIMARY KEY (`id_turma`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `turma_curso`
+--
+
+DROP TABLE IF EXISTS `turma_curso`;
+CREATE TABLE IF NOT EXISTS `turma_curso` (
+  `id_turma_curso` int NOT NULL AUTO_INCREMENT,
+  `id_turma` int NOT NULL,
   `id_curso` int NOT NULL,
-  `id_materia` int NOT NULL,
-  `tipo_nota` ENUM('n1', 'n2', 'n3') NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_prof_curso_mat_professor` (`id_professor`),
-  KEY `fk_prof_curso_mat_curso` (`id_curso`),
-  KEY `fk_prof_curso_mat_materia` (`id_materia`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id_turma_curso`),
+  KEY `id_turma` (`id_turma`),
+  KEY `id_curso` (`id_curso`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
 --
 -- Restrições para despejos de tabelas
 --
+
+--
+-- Limitadores para a tabela `professor_curso_materia`
+--
+ALTER TABLE `professor_curso_materia`
+  ADD CONSTRAINT `fk_prof_curso_mat_curso` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_prof_curso_mat_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_prof_curso_mat_professor` FOREIGN KEY (`id_professor`) REFERENCES `professores` (`id_professor`) ON DELETE CASCADE;
 
 --
 -- Limitadores para a tabela `professor_materia`
@@ -145,17 +188,8 @@ CREATE TABLE IF NOT EXISTS `professor_curso_materia` (
 ALTER TABLE `professor_materia`
   ADD CONSTRAINT `fk_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_professor` FOREIGN KEY (`id_professor`) REFERENCES `professores` (`id_professor`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- Adicionar constraints
-ALTER TABLE `professor_curso_materia`
-  ADD CONSTRAINT `fk_prof_curso_mat_professor` FOREIGN KEY (`id_professor`) REFERENCES `professores` (`id_professor`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_prof_curso_mat_curso` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_prof_curso_mat_materia` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id_materia`) ON DELETE CASCADE;
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
