@@ -27,7 +27,7 @@ if ($nome_turma == null) {
 
     // Monta a query SQL para inserir os dados na tabela "materias"
     $sql = "INSERT INTO `turmas` (`nome_turma`) 
-            VALUES ('$nome_materia')";
+            VALUES ('$nome_turma')";
 
     // Executa a query de inserção no banco de dados
     $inserir = mysqli_query($connection, $sql);

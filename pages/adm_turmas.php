@@ -16,15 +16,16 @@
       vertical-align: middle;
     }
 
-    #div-turma {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      background-color: #e9ecef;
-      justify-content: space-between;
-      padding: 10px;
-      border-bottom: solid #c0c0c0ff;
-    }
+    /* troque #div-turma por .div-turma */
+      .div-turma {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        background-color: #e9ecef;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: solid #c0c0c0ff;
+      }
 
     h3 {
       font-size: 25px;
@@ -106,7 +107,7 @@
       <div style="margin-top: 30px;width: 100%;display: flex;flex-direction: column;align-items: flex-start;">
         <div class="mb-3">
           <label for="nome_turma" class="form-label">Nome da Turma</label>
-          <input class="form-control" name="nome_turma" required />
+          <input class="form-control" name="nome_turma"/>
         </div>
       </div>
       <button type="submit" class="btn btn-primary mt-3" style="width: 30%;">Criar Turma</button>
@@ -121,7 +122,8 @@
   if ($result_turmas->num_rows > 0) {
     echo '<div class="container mt-4">';
     echo '<h2 class="mb-4" style="font-size: 1.75rem; font-weight: 500;">Lista de Turmas</h2>';
-
+    // Iniciar o container para as turmas
+    echo '<div id="turmas-container">';
     while ($turma = $result_turmas->fetch_assoc()) {
       $idTurma = $turma["id_turma"];
       
@@ -129,8 +131,8 @@
         <div class="div-turma">
           <h3>' . htmlspecialchars($turma["nome_turma"]) . '</h3>
           <div class="d-flex">
+            <button onclick="openDropdown(event)" class="dropdown-toggle" type="button"></button>
             <a href="../methods/delete_turma.php?id_turma=' . $idTurma . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta turma?\')">Remover</a>
-            <button onclick="openDropdown(event)" class="dropdown-toggle" type="button">▼</button>
           </div>
         </div>
       ';
@@ -159,7 +161,7 @@
           <h5 style="margin-bottom: 15px;">Adicionar cursos à turma</h5>
           <input type="text" class="form-control mb-3" placeholder="Pesquisar curso..." oninput="filtrarCursos(event)" data-turma-id="' . $idTurma . '" />
 
-          <form action="../methods/post_turma_cursos.php" method="POST">
+          <form action="../methods/post_turma_curso.php" method="POST">
             <input type="hidden" name="id_turma" value="' . $idTurma . '">
             <div id="lista-cursos-' . $idTurma . '" class="lista-cursos">';
 
@@ -205,7 +207,7 @@
       
       // Só mostra o botão se houver cursos
       if ($result_cursos_relacionados->num_rows > 0 || $result_cursos_nao_relacionados->num_rows > 0) {
-        echo '<button type="submit" class="btn btn-primary mt-3 w-100">Salvar Cursos da Turma</button>';
+        echo '<button type="submit" class="btn btn-primary mt-3 w-100" href="../methods/post_turma_curso.php?id_turma=' . $idTurma . '">Salvar Cursos da Turma</button>';
       }
       
       echo '

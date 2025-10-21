@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 20-Out-2025 às 13:27
+-- Tempo de geração: 21-Out-2025 às 11:01
 -- Versão do servidor: 8.0.31
 -- versão do PHP: 8.0.26
 
@@ -152,7 +152,14 @@ CREATE TABLE IF NOT EXISTS `turmas` (
   `id_turma` int NOT NULL AUTO_INCREMENT,
   `nome_turma` varchar(255) NOT NULL,
   PRIMARY KEY (`id_turma`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Extraindo dados da tabela `turmas`
+--
+
+INSERT INTO `turmas` (`id_turma`, `nome_turma`) VALUES
+(4, '3D');
 
 -- --------------------------------------------------------
 
@@ -162,13 +169,18 @@ CREATE TABLE IF NOT EXISTS `turmas` (
 
 DROP TABLE IF EXISTS `turma_curso`;
 CREATE TABLE IF NOT EXISTS `turma_curso` (
-  `id_turma_curso` int NOT NULL AUTO_INCREMENT,
   `id_turma` int NOT NULL,
   `id_curso` int NOT NULL,
-  PRIMARY KEY (`id_turma_curso`),
   KEY `id_turma` (`id_turma`),
   KEY `id_curso` (`id_curso`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
+
+--
+-- Extraindo dados da tabela `turma_curso`
+--
+
+INSERT INTO `turma_curso` (`id_turma`, `id_curso`) VALUES
+(4, 3);
 
 --
 -- Restrições para despejos de tabelas
