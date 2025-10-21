@@ -92,6 +92,11 @@
     .form-check:hover {
       background-color: #adb5bd;
     }
+
+    #action-buttons {
+      display: flex;
+    gap: 10px;
+    }
   </style>
 </head>
 
@@ -132,8 +137,11 @@
           <h3>' . htmlspecialchars($turma["nome_turma"]) . '</h3>
           <div class="d-flex">
             <button onclick="openDropdown(event)" class="dropdown-toggle" type="button"></button>
-            <a href="../methods/delete_turma.php?id_turma=' . $idTurma . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta turma?\')">Remover</a>
-          </div>
+            <div id="action-buttons">
+              <a href="../methods/put_turma.php?id_turma=' . $idTurma . '" class="btn btn-primary">Editar</a>
+              <a href="../methods/delete_turma.php?id_turma=' . $idTurma . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta turma?\')">Remover</a>
+            </div>
+            </div>
         </div>
       ';
 

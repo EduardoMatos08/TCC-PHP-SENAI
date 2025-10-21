@@ -34,7 +34,7 @@ echo '
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="width: -webkit-fill-available; justify-content: space-between; margin: 0;">
-            <li class="nav-item">
+            <li style="display: flex; align-content: center; align-items: center;" class="nav-item">
                 <a class="nav-link active" aria-current="page" href="./home.php">Horários</a>
             </li>
 ';

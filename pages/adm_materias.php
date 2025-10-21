@@ -91,6 +91,16 @@
     .form-check:hover {
       background-color: #adb5bd;
     }
+
+    #action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    #td-options-buttons {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 1fr 1fr;
+    }
   </style>
 </head>
 
@@ -132,8 +142,11 @@
         <div id="div-curso">
           <h3>' . htmlspecialchars($row2["nome_curso"]) . ' - ' . htmlspecialchars($row2["sigla_curso"]) . '</h3>
           <div class="d-flex">
+          <button onClick="openDropdown(event)" class="dropdown-toggle" type="button" id="dropdownMenuButton1"></button>
+          <div id="action-buttons">
+            <a href="../methods/put_cursos.php?id_curso=3" class="btn btn-primary">Editar</a>  
             <a href="../methods/delete_cursos.php?id_curso=' . $idCurso . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este curso?\')">Remover</a>
-            <button onClick="openDropdown(event)" class="dropdown-toggle" type="button" id="dropdownMenuButton1"></button>
+          </div>
           </div>
         </div>
       ';
@@ -344,7 +357,10 @@ if ($result->num_rows > 0) {
         <td>' . htmlspecialchars($row["nome_materia"]) . '</td>
         <td>' . htmlspecialchars($row["sigla"]) . '</td>
         <td>' . htmlspecialchars($row["carga_horaria"]) . ' Horas</td>
-        <td><a href="../methods/delete_materias.php?id_materia=' . $row["id_materia"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta matéria?\')">Remover</a></td>
+        <td id="td-options-buttons">
+          <a href="../methods/put_materias.php?id_materia=' . $row["id_materia"] . '" class="user-button btn btn-primary">Editar</a>
+          <a href="../methods/delete_materias.php?id_materia=' . $row["id_materia"] . '" class="user-button btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a>
+        </td>
       </tr>
     ';
   }

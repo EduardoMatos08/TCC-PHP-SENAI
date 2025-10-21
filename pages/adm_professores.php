@@ -146,6 +146,14 @@ form {
     #caractere-especial {
         font-weight: bold;
     }
+    .user-button {
+        width: auto;
+    }
+    #td-options-buttons {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 1fr 1fr;
+    }
 
 </style>
 
@@ -650,7 +658,12 @@ if ($result->num_rows > 0) {
             echo "<td>Não</td>";
         }
         
-        echo '<td><a href="../methods/delete_professores.php?id_professor=' . $row["id_professor"] . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a></td>';
+        echo '
+            <td id="td-options-buttons">
+                <a href="../methods/put_professores.php?id_professor=' . $row["id_professor"] . '" class="user-button btn btn-primary">Editar</a>
+                <a href="../methods/delete_professores.php?id_professor=' . $row["id_professor"] . '" class="user-button btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a>
+            </td>
+        ';
         echo "</tr>";
     }
     echo '</tbody></table></div>';
