@@ -1,6 +1,6 @@
 <?php
 // Inclui o arquivo de conexão com o banco de dados
-include 'connection.php';
+include '../connection.php';
 
 // Define o cabeçalho da resposta como JSON
 header('Content-Type: application/json');

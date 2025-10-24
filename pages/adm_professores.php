@@ -660,7 +660,7 @@ if ($result->num_rows > 0) {
         
         echo '
             <td id="td-options-buttons">
-                <a href="../methods/put_professores.php?id_professor=' . $row["id_professor"] . '" class="user-button btn btn-primary">Editar</a>
+                <a href="edit_professor.php?id_professor=' . $row["id_professor"] . '" class="user-button btn btn-primary">Editar</a>
                 <a href="../methods/delete_professores.php?id_professor=' . $row["id_professor"] . '" class="user-button btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a>
             </td>
         ';
