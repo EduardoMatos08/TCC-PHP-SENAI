@@ -1,4 +1,5 @@
 <?php
+
 include '../connection.php';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -8,11 +9,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $cpf = $_POST['cpf'];
     $horarios = $_POST['horarios'];
-    $admin = $_POST['admin'];
+    
+    // Verificar se admin foi enviado, caso contrário usar valor padrão
+    $admin = isset($_POST['admin']) ? $_POST['admin'] : '0';
+    
     $competencias = isset($_POST['competencia']) ? $_POST['competencia'] : array();
     
     // Iniciar transação
-    $conn->autocommit(FALSE);
+    $connection->autocommit(FALSE);
     $erro = false;
     
     try {
@@ -25,7 +29,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     senha = '$senha',
                     cpf = '$cpf',
                     horarios = '$horarios',
-                    admin = $admin
+                    admin = '$admin'
                     WHERE id_professor = $id_professor";
         } else {
             $sql = "UPDATE professores SET 
@@ -33,18 +37,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     email = '$email',
                     cpf = '$cpf',
                     horarios = '$horarios',
-                    admin = $admin
+                    admin = '$admin'
                     WHERE id_professor = $id_professor";
         }
         
-        if(!$conn->query($sql)) {
-            throw new Exception("Erro ao atualizar professor: " . $conn->error);
+        if(!$connection->query($sql)) {
+            throw new Exception("Erro ao atualizar professor: " . $connection->error);
         }
         
         // Limpar competências atuais do professor
         $sql_delete = "DELETE FROM professor_curso_materia WHERE id_professor = $id_professor";
-        if(!$conn->query($sql_delete)) {
-            throw new Exception("Erro ao limpar competências: " . $conn->error);
+        if(!$connection->query($sql_delete)) {
+            throw new Exception("Erro ao limpar competências: " . $connection->error);
         }
         
         // Inserir novas competências selecionadas
@@ -53,32 +57,32 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 foreach($materias as $id_materia => $tipo_nota) {
                     $id_curso = intval($id_curso);
                     $id_materia = intval($id_materia);
-                    $tipo_nota = $conn->real_escape_string($tipo_nota);
+                    $tipo_nota = $connection->real_escape_string($tipo_nota);
                     
                     $sql_insert = "INSERT INTO professor_curso_materia (id_professor, id_curso, id_materia, tipo_nota) 
                                    VALUES ($id_professor, $id_curso, $id_materia, '$tipo_nota')";
                     
-                    if(!$conn->query($sql_insert)) {
-                        throw new Exception("Erro ao inserir competência: " . $conn->error);
+                    if(!$connection->query($sql_insert)) {
+                        throw new Exception("Erro ao inserir competência: " . $connection->error);
                     }
                 }
             }
         }
         
         // Commit das alterações
-        $conn->commit();
+        $connection->commit();
         
-        header("Location: ../pages/professores.php?success=1");
+        header("Location: ../pages/adm_professores.php?success=1");
         exit();
         
     } catch (Exception $e) {
         // Rollback em caso de erro
-        $conn->rollback();
+        $connection->rollback();
         echo "Erro: " . $e->getMessage();
     }
     
-    $conn->autocommit(TRUE);
-    $conn->close();
+    $connection->autocommit(TRUE);
+    $connection->close();
 } else {
     echo "Método não permitido!";
 }

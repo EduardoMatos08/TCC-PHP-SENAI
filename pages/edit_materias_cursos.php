@@ -1,3 +1,36 @@
+<?php
+include "../connection.php";
+// Buscar dados do professor para edição
+if(isset($_GET['id_curso'])) {
+    $id_curso = $_GET['id_curso'];
+    
+    $sql = "SELECT * FROM professores WHERE id_professor = $id_professor";
+    $result = $connection->query($sql);
+    
+    if($result->num_rows > 0) {
+        $professor = $result->fetch_assoc();
+    } else {
+        die("Professor não encontrado!");
+    }
+    
+    // Buscar matérias e competências atuais do professor
+    $sql_competencias = "SELECT pcm.*, m.nome_materia, m.sigla, c.nome_curso 
+                         FROM professor_curso_materia pcm
+                         INNER JOIN materias m ON pcm.id_materia = m.id_materia
+                         INNER JOIN cursos c ON pcm.id_curso = c.id_curso
+                         WHERE pcm.id_professor = $id_professor";
+    $result_competencias = $connection->query($sql_competencias);
+    
+    $competencias_selecionadas = array();
+    while($row = $result_competencias->fetch_assoc()) {
+        $competencias_selecionadas[$row['id_curso']][$row['id_materia']] = $row['tipo_nota'];
+    }
+    
+} else {
+    die("ID do professor não especificado!");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -106,7 +139,6 @@
 
 <body>
   <?php include '../components/navbar.php'; ?>
-  <?php include "../connection.php"; ?>
 
   <h1 style="padding-top: 5.5rem; text-align: center;">CADASTRO DE CURSOS</h1>
 
