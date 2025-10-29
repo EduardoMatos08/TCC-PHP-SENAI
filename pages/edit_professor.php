@@ -378,7 +378,7 @@ if ($resultCursos->num_rows > 0) {
         </div>
         
         <button type="submit" class="btn btn-primary" style="margin: 30px 0; width: 30%;">Atualizar Professor</button>
-        <a href="../pages/professores.php" class="btn btn-secondary" style="margin-top: 10px; width: 30%;">Cancelar</a>
+        <a href="../pages/professores.php" class="btn btn-secondary" style="margin: 30px 0; width: 30%;">Cancelar</a>
     </form>
 
 </body>
@@ -476,3 +476,4 @@ function openDropdown(event) {
 
 
 </html>
+
