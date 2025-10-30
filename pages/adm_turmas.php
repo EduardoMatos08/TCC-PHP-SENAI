@@ -137,8 +137,8 @@
           <h3>' . htmlspecialchars($turma["nome_turma"]) . '</h3>
           <div class="d-flex">
             <button onclick="openDropdown(event)" class="dropdown-toggle" type="button"></button>
-            <div id="action-buttons">
-              <a href="../methods/put_turma.php?id_turma=' . $idTurma . '" class="btn btn-primary">Editar</a>
+            <div id="action-buttons"> 
+              <a href="../pages/edit_turmas.php?id_turma=' . $idTurma . '" class="btn btn-primary">Editar</a>
               <a href="../methods/delete_turma.php?id_turma=' . $idTurma . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover esta turma?\')">Remover</a>
             </div>
             </div>
