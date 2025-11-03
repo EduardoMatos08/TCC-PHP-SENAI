@@ -53,12 +53,21 @@ unset($_SESSION['error']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../bootstrap-styles/bootstrap.css" />
+    <script src="../bootstrap-styles/bootstrap.js"></script>
     <title>Editar Turma</title>
     <style>
+        html {
+            height: 100%;
+        }
+
         body {
+            height: 100%;
             font-family: Arial, sans-serif;
-            margin: 20px;
             background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .container {
             max-width: 800px;
@@ -67,6 +76,14 @@ unset($_SESSION['error']);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 40%;
+        }
+        form {
+            height: 87%;
+    display: flex
+;
+    flex-direction: column;
+    justify-content: space-between;
         }
         h1 {
             color: #333;
@@ -102,6 +119,7 @@ unset($_SESSION['error']);
             border-radius: 3px;
         }
         .btn {
+            transition: all 0.2s ease-in;
             background-color: #007bff;
             color: white;
             padding: 10px 20px;
@@ -112,8 +130,10 @@ unset($_SESSION['error']);
         }
         .btn:hover {
             background-color: #0056b3;
+            color: #fff;
         }
         .btn-voltar {
+            transition: all 0.2s ease-in;
             background-color: #6c757d;
             text-decoration: none;
             display: inline-block;
@@ -124,6 +144,7 @@ unset($_SESSION['error']);
         }
         .btn-voltar:hover {
             background-color: #545b62;
+            color: #fff;
         }
         .error {
             color: #dc3545;
@@ -162,13 +183,13 @@ unset($_SESSION['error']);
             
             <div class="form-group">
                 <label for="nome_turma">Nome da Turma:</label>
-                <input type="text" id="nome_turma" name="nome_turma" 
+                <input class="form-control" type="text" id="nome_turma" name="nome_turma" 
                        value="<?php echo htmlspecialchars($old_data ? $old_data['nome_turma'] : $turma['nome_turma']); ?>" 
                        required>
             </div>
             
             <div class="form-group">
-                <a href="./adm_turmas.php" class="btn-voltar">← Voltar</a>
+                <a href="./adm_turmas.php" class="btn-voltar">Voltar</a>
                 <button type="submit" class="btn">Atualizar Turma</button>
             </div>
         </form>
