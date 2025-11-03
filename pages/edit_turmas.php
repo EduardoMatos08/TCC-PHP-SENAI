@@ -4,38 +4,22 @@ include '../connection.php';
 // Iniciar sessão para mensagens de erro
 session_start();
 
-// Buscar dados da turma para edição
-if(isset($_GET['id_turma'])) {
-    $id_turma = $_GET['id_turma'];
+// Buscar dados do curso para edição
+if(isset($_GET['id_curso'])) {
+    $id_curso = $_GET['id_curso'];
     
-    $sql = "SELECT * FROM turmas WHERE id_turma = $id_turma";
+    $sql = "SELECT * FROM cursos WHERE id_curso = $id_curso";
     $result = $connection->query($sql);
     
     if($result->num_rows > 0) {
-        $turma = $result->fetch_assoc();
+        $curso = $result->fetch_assoc();
     } else {
-        die("Turma não encontrada!");
-    }
-    
-    // Buscar cursos associados à turma
-    $sql_cursos = "SELECT tc.id_curso, c.nome_curso 
-                   FROM turma_curso tc
-                   INNER JOIN cursos c ON tc.id_curso = c.id_curso
-                   WHERE tc.id_turma = $id_turma";
-    $result_cursos = $connection->query($sql_cursos);
-    
-    $cursos_selecionados = array();
-    while($row = $result_cursos->fetch_assoc()) {
-        $cursos_selecionados[] = $row['id_curso'];
+        die("Curso não encontrado!");
     }
     
 } else {
-    die("ID da turma não especificado!");
+    die("ID do curso não especificado!");
 }
-
-// Buscar todos os cursos disponíveis
-$sql_todos_cursos = "SELECT * FROM cursos";
-$result_todos_cursos = $connection->query($sql_todos_cursos);
 
 // Verificar se há dados antigos (em caso de erro)
 $old_data = isset($_SESSION['old_data']) ? $_SESSION['old_data'] : null;
@@ -55,7 +39,7 @@ unset($_SESSION['error']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../bootstrap-styles/bootstrap.css" />
     <script src="../bootstrap-styles/bootstrap.js"></script>
-    <title>Editar Turma</title>
+    <title>Editar Curso</title>
     <style>
         html {
             height: 100%;
@@ -70,27 +54,27 @@ unset($_SESSION['error']);
             justify-content: center;
         }
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            height: 40%;
+            height: auto;
         }
         form {
-            height: 87%;
-    display: flex
-;
-    flex-direction: column;
-    justify-content: space-between;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         h1 {
             color: #333;
             text-align: center;
+            margin-bottom: 20px;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
@@ -98,35 +82,24 @@ unset($_SESSION['error']);
             font-weight: bold;
             color: #555;
         }
-        input[type="text"], select {
+        input[type="text"] {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
-        }
-        .checkbox-group {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 4px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .checkbox-item {
-            margin-bottom: 8px;
-            padding: 5px;
-            background: #f9f9f9;
-            border-radius: 3px;
+            font-size: 16px;
         }
         .btn {
             transition: all 0.2s ease-in;
             background-color: #007bff;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            width: 100%;
         }
         .btn:hover {
             background-color: #0056b3;
@@ -137,10 +110,13 @@ unset($_SESSION['error']);
             background-color: #6c757d;
             text-decoration: none;
             display: inline-block;
-            margin-right: 10px;
-            padding: 10px 20px;
+            margin-bottom: 10px;
+            padding: 12px 24px;
             color: white;
             border-radius: 4px;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
         }
         .btn-voltar:hover {
             background-color: #545b62;
@@ -166,7 +142,7 @@ unset($_SESSION['error']);
 </head>
 <body>
     <div class="container">
-        <h1>Editar Turma</h1>
+        <h1>Editar Curso</h1>
         
         <?php if(!empty($error)): ?>
             <div class="error"><?php echo $error; ?></div>
@@ -178,19 +154,26 @@ unset($_SESSION['error']);
             <?php endforeach; ?>
         <?php endif; ?>
         
-        <form action="../methods/update_turmas.php" method="POST">
-            <input type="hidden" name="id_turma" value="<?php echo $turma['id_turma']; ?>">
+        <form action="../methods/update_materias_cursos.php" method="POST">
+            <input type="hidden" name="id_curso" value="<?php echo $curso['id_curso']; ?>">
             
             <div class="form-group">
-                <label for="nome_turma">Nome da Turma:</label>
-                <input class="form-control" type="text" id="nome_turma" name="nome_turma" 
-                       value="<?php echo htmlspecialchars($old_data ? $old_data['nome_turma'] : $turma['nome_turma']); ?>" 
+                <label for="nome_curso">Nome do Curso:</label>
+                <input class="form-control" type="text" id="nome_curso" name="nome_curso" 
+                       value="<?php echo htmlspecialchars($old_data ? $old_data['nome_curso'] : $curso['nome_curso']); ?>" 
                        required>
             </div>
             
             <div class="form-group">
-                <a href="./adm_turmas.php" class="btn-voltar">Voltar</a>
-                <button type="submit" class="btn">Atualizar Turma</button>
+                <label for="sigla_curso">Sigla do Curso:</label>
+                <input class="form-control" type="text" id="sigla_curso" name="sigla_curso" 
+                       value="<?php echo htmlspecialchars($old_data ? $old_data['sigla_curso'] : $curso['sigla_curso']); ?>" 
+                       required>
+            </div>
+            
+            <div class="form-group">
+                <a href="./adm_materias.php" class="btn-voltar">Voltar</a>
+                <button type="submit" class="btn">Atualizar Curso</button>
             </div>
         </form>
     </div>

@@ -144,7 +144,7 @@
           <div class="d-flex">
           <button onClick="openDropdown(event)" class="dropdown-toggle" type="button" id="dropdownMenuButton1"></button>
           <div id="action-buttons">
-            <a href="../methods/edit_cursos_materias.php?id_curso=3" class="btn btn-primary">Editar</a>  
+            <a href="../pages/edit_materias_cursos.php?id_curso=' . $idCurso . '" class="btn btn-primary">Editar</a>  
             <a href="../methods/delete_cursos.php?id_curso=' . $idCurso . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este curso?\')">Remover</a>
           </div>
           </div>
@@ -358,7 +358,7 @@ if ($result->num_rows > 0) {
         <td>' . htmlspecialchars($row["sigla"]) . '</td>
         <td>' . htmlspecialchars($row["carga_horaria"]) . ' Horas</td>
         <td id="td-options-buttons">
-          <a href="../methods/update_materias.php?id_materia=' . $row["id_materia"] . '" class="user-button btn btn-primary">Editar</a>
+          <a href="../pages/edit_materias_cursos.php?id_materia=' . $row["id_materia"] . '" class="user-button btn btn-primary">Editar</a>
           <a href="../methods/delete_materias.php?id_materia=' . $row["id_materia"] . '" class="user-button btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a>
         </td>
       </tr>
