@@ -144,7 +144,7 @@
           <div class="d-flex">
           <button onClick="openDropdown(event)" class="dropdown-toggle" type="button" id="dropdownMenuButton1"></button>
           <div id="action-buttons">
-            <a href="../pages/edit_materias_cursos.php?id_curso=' . $idCurso . '" class="btn btn-primary">Editar</a>  
+            <a href="../pages/edit_cursos.php?id_curso=' . $idCurso . '" class="btn btn-primary">Editar</a>  
             <a href="../methods/delete_cursos.php?id_curso=' . $idCurso . '" class="btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este curso?\')">Remover</a>
           </div>
           </div>
