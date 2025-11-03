@@ -358,7 +358,7 @@ if ($result->num_rows > 0) {
         <td>' . htmlspecialchars($row["sigla"]) . '</td>
         <td>' . htmlspecialchars($row["carga_horaria"]) . ' Horas</td>
         <td id="td-options-buttons">
-          <a href="../methods/put_materias.php?id_materia=' . $row["id_materia"] . '" class="user-button btn btn-primary">Editar</a>
+          <a href="../methods/update_materias.php?id_materia=' . $row["id_materia"] . '" class="user-button btn btn-primary">Editar</a>
           <a href="../methods/delete_materias.php?id_materia=' . $row["id_materia"] . '" class="user-button btn btn-danger" onclick="return confirm(\'Tem certeza que deseja remover este usuário?\')">Remover</a>
         </td>
       </tr>

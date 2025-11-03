@@ -168,35 +168,6 @@ unset($_SESSION['error']);
             </div>
             
             <div class="form-group">
-                <label>Cursos Associados:</label>
-                <div class="checkbox-group">
-                    <?php 
-                    // Reset pointer do resultado
-                    $result_todos_cursos->data_seek(0);
-                    while($curso = $result_todos_cursos->fetch_assoc()): 
-                        $checked = '';
-                        if($old_data) {
-                            // Usar dados do formulário em caso de erro
-                            $checked = isset($old_data['cursos']) && in_array($curso['id_curso'], $old_data['cursos']) ? 'checked' : '';
-                        } else {
-                            // Usar dados do banco
-                            $checked = in_array($curso['id_curso'], $cursos_selecionados) ? 'checked' : '';
-                        }
-                    ?>
-                        <div class="checkbox-item">
-                            <label>
-                                <input type="checkbox" name="cursos[]" 
-                                       value="<?php echo $curso['id_curso']; ?>"
-                                       <?php echo $checked; ?>>
-                                <?php echo htmlspecialchars($curso['nome_curso'] . ' (' . $curso['sigla_curso'] . ')'); ?>
-                            </label>
-                        </div>
-                    <?php endwhile; ?>
-                </div>
-                <small style="color: #666;">Deixe em branco para remover todos os cursos associados</small>
-            </div>
-            
-            <div class="form-group">
                 <a href="./adm_turmas.php" class="btn-voltar">← Voltar</a>
                 <button type="submit" class="btn">Atualizar Turma</button>
             </div>
