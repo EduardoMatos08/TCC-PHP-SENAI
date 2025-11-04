@@ -4,21 +4,21 @@ include '../connection.php';
 // Iniciar sessão para mensagens de erro
 session_start();
 
-// Buscar dados do curso para edição
-if(isset($_GET['id_curso'])) {
-    $id_curso = $_GET['id_curso'];
+// Buscar dados da matéria para edição
+if(isset($_GET['id_materia'])) {
+    $id_materia = $_GET['id_materia'];
     
-    $sql = "SELECT * FROM cursos WHERE id_curso = $id_curso";
+    $sql = "SELECT * FROM materias WHERE id_materia = $id_materia";
     $result = $connection->query($sql);
     
     if($result->num_rows > 0) {
-        $curso = $result->fetch_assoc();
+        $materia = $result->fetch_assoc(); // CORREÇÃO: mudar para $materia (singular)
     } else {
-        die("Curso não encontrado!");
+        die("Matéria não encontrada!");
     }
     
 } else {
-    die("ID do curso não especificado!");
+    die("ID da matéria não especificado!");
 }
 
 // Verificar se há dados antigos (em caso de erro)
@@ -39,7 +39,7 @@ unset($_SESSION['error']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../bootstrap-styles/bootstrap.css" />
     <script src="../bootstrap-styles/bootstrap.js"></script>
-    <title>Editar Curso</title>
+    <title>Editar Matéria</title> <!-- CORREÇÃO: título -->
     <style>
         html {
             height: 100%;
@@ -82,7 +82,7 @@ unset($_SESSION['error']);
             font-weight: bold;
             color: #555;
         }
-        input[type="text"] {
+        input[type="text"], input[type="number"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -97,7 +97,7 @@ unset($_SESSION['error']);
             padding: 12px 24px;
             border: none;
             border-radius: 4px;
-            cursor: pointer;
+            cursor: pointer; /* CORREÇÃO: cursor */
             font-size: 16px;
             width: 100%;
         }
@@ -142,7 +142,7 @@ unset($_SESSION['error']);
 </head>
 <body>
     <div class="container">
-        <h1>Editar Curso</h1>
+        <h1>Editar Matéria</h1> <!-- CORREÇÃO: título -->
         
         <?php if(!empty($error)): ?>
             <div class="error"><?php echo $error; ?></div>
@@ -154,26 +154,33 @@ unset($_SESSION['error']);
             <?php endforeach; ?>
         <?php endif; ?>
         
-        <form action="../methods/update_materias_cursos.php" method="POST">
-            <input type="hidden" name="id_curso" value="<?php echo $curso['id_curso']; ?>">
+        <form action="../methods/update_materias_cursos.php" method="POST"> <!-- CORREÇÃO: nome do arquivo -->
+            <input type="hidden" name="id_materia" value="<?php echo $materia['id_materia']; ?>"> <!-- CORREÇÃO: name e variável -->
             
             <div class="form-group">
-                <label for="nome_curso">Nome do Curso:</label>
-                <input class="form-control" type="text" id="nome_curso" name="nome_curso" 
-                       value="<?php echo htmlspecialchars($old_data ? $old_data['nome_curso'] : $curso['nome_curso']); ?>" 
-                       required>
+                <label for="nome_materia">Nome da Matéria:</label> <!-- CORREÇÃO: id -->
+                <input class="form-control" type="text" id="nome_materia" name="nome_materia" 
+                       value="<?php echo htmlspecialchars($old_data ? $old_data['nome_materia'] : $materia['nome_materia']); ?>" 
+                       required> <!-- CORREÇÃO: variável -->
             </div>
             
             <div class="form-group">
-                <label for="sigla_curso">Sigla do Curso:</label>
-                <input class="form-control" type="text" id="sigla_curso" name="sigla_curso" 
-                       value="<?php echo htmlspecialchars($old_data ? $old_data['sigla_curso'] : $curso['sigla_curso']); ?>" 
-                       required>
+                <label for="sigla">Sigla da Matéria:</label> <!-- CORREÇÃO: texto -->
+                <input class="form-control" type="text" id="sigla" name="sigla" 
+                       value="<?php echo htmlspecialchars($old_data ? $old_data['sigla'] : $materia['sigla']); ?>" 
+                       required> <!-- CORREÇÃO: variável -->
+            </div>
+            
+            <div class="form-group">
+                <label for="carga_horaria">Carga Horária:</label> <!-- CORREÇÃO: id -->
+                <input class="form-control" type="number" id="carga_horaria" name="carga_horaria" 
+                       value="<?php echo htmlspecialchars($old_data ? $old_data['carga_horaria'] : $materia['carga_horaria']); ?>" 
+                       required> <!-- CORREÇÃO: variável -->
             </div>
             
             <div class="form-group">
                 <a href="./adm_materias.php" class="btn-voltar">Voltar</a>
-                <button type="submit" class="btn">Atualizar Curso</button>
+                <button type="submit" class="btn">Atualizar Matéria</button> <!-- CORREÇÃO: texto -->
             </div>
         </form>
     </div>

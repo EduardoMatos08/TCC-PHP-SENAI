@@ -3,16 +3,17 @@ include '../connection.php';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Receber dados do formulário
-    $id_curso = $_POST['id_curso'];
-    $nome_curso = trim($_POST['nome_curso']);
-    $sigla_curso = trim($_POST['sigla_curso']);
+    $id_materia = $_POST['id_materia'];
+    $nome_materia = trim($_POST['nome_materia']);
+    $sigla = trim($_POST['sigla']);
+    $carga_horaria = trim($_POST['carga_horaria']);
     
     // Validar dados
     $errors = array();
     
-    // Verificar se o nome do curso está em branco
-    if(empty($nome_curso) || empty($sigla_curso)) {
-        $errors[] = "O nome do curso e a sigla são obrigatórios!";
+    // Verificar se os campos estão em branco
+    if(empty($nome_materia) || empty($sigla) || empty($carga_horaria)) {
+        $errors[] = "O nome da matéria, sigla e carga horária são obrigatórios!";
     }
     
     // Verificar se há erros
@@ -20,7 +21,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         session_start();
         $_SESSION['errors'] = $errors;
         $_SESSION['old_data'] = $_POST;
-        header("Location: editar_curso.php?id_curso=" . $id_curso);
+        header("Location: editar_materia.php?id_materia=" . $id_materia);
         exit();
     }
     
@@ -28,13 +29,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $connection->autocommit(FALSE);
     
     try {
-        // Atualizar dados do curso
-        $sql = "UPDATE cursos SET nome_curso = ?, sigla_curso = ? WHERE id_curso = ?";
+        // Atualizar dados da matéria - CORREÇÃO: nome da coluna
+        $sql = "UPDATE materias SET nome_materia = ?, sigla = ?, carga_horaria = ? WHERE id_materia = ?";
         $stmt = $connection->prepare($sql);
-        $stmt->bind_param("ssi", $nome_curso, $sigla_curso, $id_curso);
+        $stmt->bind_param("ssii", $nome_materia, $sigla, $carga_horaria, $id_materia); // CORREÇÃO: "ssii"
         
         if(!$stmt->execute()) {
-            throw new Exception("Erro ao atualizar curso: " . $stmt->error);
+            throw new Exception("Erro ao atualizar matéria: " . $stmt->error);
         }
         
         // Commit das alterações
@@ -48,8 +49,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $connection->rollback();
         
         session_start();
-        $_SESSION['error'] = "Erro ao atualizar curso: " . $e->getMessage();
-        header("Location: editar_curso.php?id_curso=" . $id_curso);
+        $_SESSION['error'] = "Erro ao atualizar matéria: " . $e->getMessage();
+        header("Location: editar_materia.php?id_materia=" . $id_materia); // CORREÇÃO: nome do arquivo
         exit();
     }
     
