@@ -5,10 +5,10 @@ include '../connection.php';
 session_start();
 
 // Buscar dados do curso para edição
-if(isset($_GET['id_curso'])) {
-    $id_curso = $_GET['id_curso'];
+if(isset($_GET['id_turma'])) {
+    $id_turma = $_GET['id_turma'];
     
-    $sql = "SELECT * FROM cursos WHERE id_curso = $id_curso";
+    $sql = "SELECT * FROM turmas WHERE id_turma = $id_turma";
     $result = $connection->query($sql);
     
     if($result->num_rows > 0) {
@@ -142,7 +142,7 @@ unset($_SESSION['error']);
 </head>
 <body>
     <div class="container">
-        <h1>Editar Curso</h1>
+        <h1>Editar Turma</h1>
         
         <?php if(!empty($error)): ?>
             <div class="error"><?php echo $error; ?></div>
@@ -154,26 +154,20 @@ unset($_SESSION['error']);
             <?php endforeach; ?>
         <?php endif; ?>
         
-        <form action="../methods/update_materias_cursos.php" method="POST">
-            <input type="hidden" name="id_curso" value="<?php echo $curso['id_curso']; ?>">
+        <form action="../methods/update_turmas.php" method="POST">
+            <input type="hidden" name="id_turma" value="<?php echo $curso['id_turma']; ?>">
             
             <div class="form-group">
-                <label for="nome_curso">Nome do Curso:</label>
-                <input class="form-control" type="text" id="nome_curso" name="nome_curso" 
-                       value="<?php echo htmlspecialchars($old_data ? $old_data['nome_curso'] : $curso['nome_curso']); ?>" 
+                <label for="nome_turma">Nome do Curso:</label>
+                <input class="form-control" type="text" id="nome_turma" name="nome_turma" 
+                       value="<?php echo htmlspecialchars($old_data ? $old_data['nome_turma'] : $curso['nome_turma']); ?>" 
                        required>
             </div>
             
-            <div class="form-group">
-                <label for="sigla_curso">Sigla do Curso:</label>
-                <input class="form-control" type="text" id="sigla_curso" name="sigla_curso" 
-                       value="<?php echo htmlspecialchars($old_data ? $old_data['sigla_curso'] : $curso['sigla_curso']); ?>" 
-                       required>
-            </div>
             
             <div class="form-group">
-                <a href="./adm_materias.php" class="btn-voltar">Voltar</a>
-                <button type="submit" class="btn">Atualizar Curso</button>
+                <a href="./adm_turmas.php" class="btn-voltar">Voltar</a>
+                <button type="submit" class="btn">Atualizar Turma</button>
             </div>
         </form>
     </div>
